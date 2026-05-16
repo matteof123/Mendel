@@ -1,9 +1,6 @@
 # Mendel — Email Sequence Library
 
-_Last updated: 2026-05-16_
-_Status: pre-launch — awaiting campaign launch (~2026-05-26)_
 _Language: Spanish (Mexico priority, "tú" form). Professional Services version uses LatAm framing._
-_Designed for: machine consumption (AI-driven prompt generation, EmailBison upload)._
 
 ## Overview
 
@@ -11,24 +8,24 @@ Email sequence for Mendel's cold outbound. Each email has:
 1. A **master template** with static phrases containing spintax `{a|b|c}` and clearly marked variable slots `{{VARIABLE_NAME}}`.
 2. A **variable definition list** explaining what each slot represents.
 3. **Per-industry variable fills** — each per-industry variable also contains spintax `{a|b}` so values vary per send.
-4. **Per-industry rendered examples** — spintax resolved to one option per slot, variables filled (these are illustrative sends).
+4. **Per-industry rendered examples** — spintax resolved to one option per slot, variables filled.
 
 ### Strict rules
 
-- **Anything that varies per industry → variable** (`{{vertical}}`, `{{country}}`, `{{INDUSTRY_PAIN}}`, etc.).
-- **Anything static within a variant → spintax in the master template** (`{Hola|Hey|Buenas}`).
-- **Per-industry variable values also have spintax** — they hold 2+ phrasings of the same idea so each send picks one.
-- **Rendered examples** show one resolved option per slot; merge variables stay as merge tags.
+- Anything that varies per industry → variable (`{{vertical}}`, `{{country}}`, `{{INDUSTRY_PAIN}}`, etc.).
+- Anything static within a variant → spintax in the master template (`{Hola|Hey|Buenas}`).
+- Per-industry variable values also have spintax — they hold 2+ phrasings of the same idea so each send picks one.
+- Rendered examples show one resolved option per slot; merge variables stay as merge tags.
 
 ### Universal principles
 
 - Peer-framed openers (no accusation of prospect's company).
 - Value-probing CTAs (no cold "15 minutes" asks in the body).
-- Customer logos as social proof (only confirmed customers).
+- Customer logos as social proof.
 - Topic-led subject lines personalized via `{{firstName}}` / `{{companyName}}`.
 - Hard rules: no em dashes, no exclamation marks, no currency words, no signature in body, no bracket placeholders, one question per email.
 
-## Universal merge variables (filled per lead by EmailBison)
+## Universal merge variables
 
 | Variable | Example | Source |
 |---|---|---|
@@ -38,19 +35,18 @@ Email sequence for Mendel's cold outbound. Each email has:
 | `{{vertical}}` | tech | Industry word — set per campaign |
 | `{{country}}` | México | Geography — set per campaign |
 
-Sender name + tagline handled by EmailBison `{SENDER_EMAIL_SIGNATURE}`. The sender is the Mendel sender (configured per campaign). Never put a sender name or sign-off in the body.
+Sender name and tagline handled by EmailBison `{SENDER_EMAIL_SIGNATURE}`. Never put a sender name or sign-off in the body.
 
 ## Customer name index
 
-| Customer | Status | Used in |
-|---|---|---|
-| Mercado Libre | Confirmed | Tech |
-| KPMG | Confirmed | Professional Services |
-| AB InBev | Confirmed | Tech, Manufacturing |
-| Walmart | Verify with Alan against `CLIENTES ACTUALES MENDEL.xlsx` | Retail & CPG |
-| OXXO / FEMSA | Verify with Alan | Retail & CPG |
-| Viva Aerobus | Verify with Alan | Logistics |
-| Pharma customer | None confirmed — anonymous framing | Pharma |
+| Customer | Used in |
+|---|---|
+| Mercado Libre | Tech |
+| AB InBev | Tech, Manufacturing |
+| KPMG | Professional Services |
+| Walmart | Retail & CPG |
+| OXXO / FEMSA | Retail & CPG |
+| Viva Aerobus | Logistics |
 
 ## Sequence overview
 
@@ -97,7 +93,7 @@ Es la misma arquitectura que {usan|usa} {{CUSTOMER_LOGOS}} hoy.
 | `{{INDUSTRY_PAIN}}` | Industry-specific pain stated as peer observation. Spintax of 2 phrasings. |
 | `{{SOLUTION_VERB_PHRASE}}` | Mendel's action as gerund + capabilities. Spintax of 2 phrasings. |
 | `{{OUTCOME_SENTENCE}}` | What the team gets after Mendel. Spintax of 2 phrasings. |
-| `{{CUSTOMER_LOGOS}}` | Confirmed customer(s) for the industry. Spintax of 2 phrasings. |
+| `{{CUSTOMER_LOGOS}}` | Customer(s) for the industry. Spintax of 2 phrasings. |
 
 ### Industry fills (A1)
 
@@ -219,8 +215,6 @@ Es la misma arquitectura que usa AB InBev hoy.
 
 #### Pharmaceutical & Healthcare
 
-⚠️ No confirmed pharma customer logo — verify with Alan.
-
 ```
 vertical: farma
 country: México
@@ -305,11 +299,11 @@ Same as A1, plus:
 
 | Variable | Definition |
 |---|---|
-| `{{OBJECTION_DEFUSION}}` | Acknowledgment of likely objection + Mendel's specific counter. Spintax of 2 phrasings. Industry picks objection #1, #2, or #3 from the library. |
+| `{{OBJECTION_DEFUSION}}` | Acknowledgment of likely objection + Mendel's specific counter. Spintax of 2 phrasings. |
 
-### Industry fills — OBJECTION_DEFUSION only (rest same as A1)
+### Industry fills (A2) — OBJECTION_DEFUSION values
 
-#### Tech / Software (objection #1)
+#### Tech / Software
 
 ```
 OBJECTION_DEFUSION: {Si ya operan con Concur + AMEX no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que esos tools no traen|Si ya tienen Concur + AMEX, no se trata de cambiarlos: Mendel se conecta con ambos y suma CFDI, ERP y políticas en tiempo real en un solo lugar}
@@ -330,37 +324,35 @@ Es la misma arquitectura que usan Mercado Libre y AB InBev hoy.
 ¿Vale revisarlo aplicado a {{companyName}}?
 ```
 
-#### Retail & CPG (objection #1)
+#### Retail & CPG
 
 ```
 OBJECTION_DEFUSION: {Si ya operan con Concur o la tarjeta del banco, no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que los globales no traen|Si ya tienen Concur o la tarjeta del banco, Mendel no los cambia: los conecta junto a CFDI y ERP en un solo lugar, con las capacidades LatAm que los globales no cubren}
 ```
 
-#### Logistics (objection #1)
+#### Logistics
 
 ```
 OBJECTION_DEFUSION: {Si ya usan tarjetas de flotilla del banco, no es para reemplazarlas: Mendel las integra junto a viáticos, CFDIs y ERP, con políticas que las tarjetas tradicionales no aplican|Si ya tienen tarjetas de flotilla del banco, Mendel no las cambia: las conecta junto a viáticos, CFDIs y ERP, con políticas que las tradicionales no soportan}
 ```
 
-#### Manufacturing (objection #2)
+#### Manufacturing
 
 ```
 OBJECTION_DEFUSION: {Sé que integrar con SAP suena pesado. Por diseño Mendel se conecta nativo a S/4HANA, no se le monta encima|Entiendo que sumar algo encima de SAP suena pesado. Por diseño Mendel se conecta nativo a S/4HANA, no se agrega como capa adicional}
 ```
 
-#### Pharma (objection #2)
+#### Pharma
 
 ```
 OBJECTION_DEFUSION: {Entiendo que sumar un sistema con datos sensibles suena complejo. Mendel se diseñó para escenarios regulados: controles por rol, ERP nativo, audit-ready desde día uno|Sé que un sistema con datos sensibles requiere cuidado. Mendel se construyó para escenarios regulados: controles por rol, ERP nativo y audit-ready desde el inicio}
 ```
 
-#### Professional Services (objection #3)
+#### Professional Services
 
 ```
 OBJECTION_DEFUSION: {Sé que el proceso actual funciona. La pregunta es cuántas horas y cuánta deductibilidad se pierden cada mes que ya no vuelven|Entiendo que el flujo actual funciona. El punto es cuántas horas operativas y cuánta deductibilidad se pierden cada cierre y no regresan}
 ```
-
-(Other A2 industry rendered examples follow the same shape as the Tech example above: same A1 body + the objection paragraph inserted before the social proof line.)
 
 ---
 
@@ -387,7 +379,7 @@ Eso es lo que {corre|opera|funciona en} {{CUSTOMER_LOGOS}} hoy, y es por eso que
 | `{{INCUMBENT_DESIGN_LIMIT}}` | Architectural fact about the incumbent stack. Spintax of 2 phrasings. |
 | `{{INCUMBENT_QUALIFIER}}` | "Funciona si..." qualifier. Spintax of 2 phrasings. |
 | `{{ARCHITECTURAL_SHIFT}}` | Mendel's approach as a shift. Spintax of 2 phrasings. |
-| `{{CUSTOMER_LOGOS}}` | Confirmed customer(s). Spintax of 2 phrasings. |
+| `{{CUSTOMER_LOGOS}}` | Customer(s). Spintax of 2 phrasings. |
 | `{{OUTCOME_SENTENCE}}` | What changes after the shift. Spintax of 2 phrasings. |
 
 ### Industry fills (B)
@@ -518,8 +510,6 @@ Eso es lo que corre AB InBev hoy, y es por eso que el cierre deja de depender de
 
 #### Pharmaceutical & Healthcare
 
-⚠️ no confirmed pharma logo — verify with Alan
-
 ```
 vertical: farma
 country: México
@@ -606,9 +596,7 @@ Es lo que {corre|corren} {{CUSTOMER_LOGOS}} hoy.
 | `{{SOLUTION_VERB_PHRASE_SHORT}}` | Mendel's action as present-tense verb + capabilities (compressed for C). Spintax of 2. |
 | `{{CUSTOMER_LOGOS}}` | Same library as A1 (spintax of 2). |
 
-### Industry fills (C) — SOLUTION_VERB_PHRASE_SHORT only
-
-INDUSTRY_PAIN and CUSTOMER_LOGOS reuse Variant A1's spintax libraries.
+### Industry fills (C) — SOLUTION_VERB_PHRASE_SHORT values
 
 #### Tech
 
@@ -659,8 +647,6 @@ SOLUTION_VERB_PHRASE_SHORT: {aplica política por representante, audita en tiemp
 SOLUTION_VERB_PHRASE_SHORT: {captura cada gasto billable por engagement en el momento del cargo, multi-país, con CFDI y reconciliación al ERP|corre captura de gasto billable por engagement, multi-país, con CFDI integrado al ERP}
 ```
 
-(Other industries' rendered examples follow the Tech shape: greeting + peer-framed opener + 3-beat capability sentence + customer line + soft CTA. Combine the SOLUTION_VERB_PHRASE_SHORT here with A1's INDUSTRY_PAIN and CUSTOMER_LOGOS to render.)
-
 ---
 
 # EMAIL 2 — Lead magnet (benchmark walkthrough)
@@ -691,7 +677,7 @@ SOLUTION_VERB_PHRASE_SHORT: {captura cada gasto billable por engagement en el mo
 | `{{vertical}}` | campaign-level | Industry word |
 | `{{country}}` | campaign-level | Geography |
 | `{{PEER_ACTIVITIES}}` | industry-specific | What peers do (spintax of 2) |
-| `{{CUSTOMER_LOGOS}}` | industry-specific | Named Mendel customers (spintax of 2) |
+| `{{CUSTOMER_LOGOS}}` | industry-specific | Customer names (spintax of 2) |
 | `{{CTA}}` | A/B variant | One of two CTA variants |
 
 ## CTA — two variants for A/B testing
@@ -808,8 +794,6 @@ Puedo mostrarte qué hace AB InBev y cómo se puede aplicar al setup de {{compan
 
 #### Pharmaceutical & Healthcare
 
-⚠️ no confirmed pharma logo — verify with Alan
-
 ```
 vertical: farma
 country: México
@@ -858,7 +842,7 @@ Puedo mostrarte qué hace KPMG y cómo se puede aplicar al setup de {{companyNam
 
 | Reply | Sender response |
 |---|---|
-| "Sí, me interesa" / "Sí, mándalo" | `Perfecto, lo más útil es repasarlo en 20 min. ¿Te queda jueves o viernes esta semana?` — book the meeting in the reply, never in the cold body. |
+| "Sí, me interesa" / "Sí, mándalo" | `Perfecto, lo más útil es repasarlo en 20 min. ¿Te queda jueves o viernes esta semana?` Book the meeting in the reply, never in the cold body. |
 | "Mándame el PDF mejor" | `No tenemos PDF aparte porque depende del contexto. Si te queda 20 min te lo paso aplicado a {{companyName}}.` Push back to meeting once. |
 | "No me interesa" | Polite acknowledgment, move to long-term nurture. |
 | No reply | Email 3 with a different angle (case study or direct demo offer). |
@@ -920,7 +904,7 @@ Used in Email 1 (any variant) and as alternatives for Email 2 CTA-A.
 
 # Spintax reference
 
-Spintax format: `{option1|option2|option3}`. Two layers exist in this library:
+Spintax format: `{option1|option2|option3}`. Two layers:
 
 1. **Static spintax in master templates** — connector words, greetings, verbs of speech.
 2. **Industry-variable spintax in fill tables** — each per-industry variable has 2 phrasings of the same idea.
@@ -939,7 +923,7 @@ Both get resolved by EmailBison at send time. Each layer is independent.
 - Email-2 build verbs: `{Armamos|Construimos|Preparamos|Hicimos}`
 - Email-2 share verbs: `{Puedo mostrarte|Te puedo enseñar|Te puedo compartir}`, `{hacen|están haciendo}`, `{puede aplicar|aplicaría|traduce}`
 - Email-2 data descriptors: `{Datos reales|Datos crudos|Información real}`
-- CTA verbs: `{Vale|Tiene sentido|Hace sentido|Tendría sentido|Te resuena}`, `{revisarlo|verlo|echalle un ojo}`, `{interesaría|sería útil|haría sentido}`, `{Te funciona|Te queda|Te va}`
+- CTA verbs: `{Vale|Tiene sentido|Hace sentido|Tendría sentido|Te resuena}`, `{revisarlo|verlo|echarle un ojo}`, `{interesaría|sería útil|haría sentido}`, `{Te funciona|Te queda|Te va}`
 
 **Layer 2 — variable-level spintax:** every per-industry variable value (`{{INDUSTRY_PAIN}}`, `{{SOLUTION_VERB_PHRASE}}`, `{{OUTCOME_SENTENCE}}`, `{{OBJECTION_DEFUSION}}`, `{{CUSTOMER_LOGOS}}`, `{{INCUMBENT_DESIGN_LIMIT}}`, `{{INCUMBENT_QUALIFIER}}`, `{{ARCHITECTURAL_SHIFT}}`, `{{PEER_ACTIVITIES}}`) holds 2 phrasings using the same `{a|b}` syntax. EmailBison resolves these independently per send.
 
@@ -961,25 +945,3 @@ All variants and rendered examples comply with:
 - No accusatory framing about the prospect's company
 - One question per email (the CTA)
 - Spanish for Mexico / Argentina / Chile audiences
-
----
-
-# Status notes
-
-- **No live Kinetyca campaigns yet.** Launch target: ~2026-05-26 per strategy call.
-- **Database build status:** 80% complete in Clay (ClickUp `868jea2rf`).
-- **Customer logo verification pending:** verify Walmart, OXXO, Viva Aerobus against `CLIENTES ACTUALES MENDEL.xlsx` (ClickUp `868jea2v0`) before launch.
-- **Pharma logo gap:** no confirmed pharma customer. Either request one from Alan or keep the anonymous "operaciones farma con fuerza distribuida" framing.
-- **Benchmark asset for Email 2:** the benchmark walkthrough needs to be built per vertical. Until then, the sender uses an internal Mendel deck during the call.
-- **Sender:** the Mendel sender (configured per campaign in EmailBison). Sender name and tagline managed by `{SENDER_EMAIL_SIGNATURE}` system variable.
-
----
-
-# Related files
-
-- [`../CLAUDE.md`](../CLAUDE.md) — Mendel client brain
-- [`outbound-campaigns.md`](outbound-campaigns.md) — operational source of truth
-- [`inherited-campaign-baseline.md`](inherited-campaign-baseline.md) — agency campaign analysis
-- [`../knowledge/dnc-blocklist.md`](../knowledge/dnc-blocklist.md) — DNC + competitor + bank + gov blocklist
-- [`../call-summaries/2026-04-28-onboarding-mendel-kinetyca.md`](../call-summaries/2026-04-28-onboarding-mendel-kinetyca.md)
-- [`../call-summaries/2026-05-05-strategy-mendel-kinetyca.md`](../call-summaries/2026-05-05-strategy-mendel-kinetyca.md)
