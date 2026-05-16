@@ -1,4 +1,4 @@
-# Mendel — Email 1 Library
+# Mendel — Email Sequence Library
 
 _Last updated: 2026-05-16_
 _Status: pre-launch — awaiting campaign launch (~2026-05-26)_
@@ -7,13 +7,20 @@ _Designed for: machine consumption (AI-driven prompt generation, EmailBison uplo
 
 ## Overview
 
-Three independent variants of Email 1 for Mendel's cold outbound. Each variant has:
+Email sequence for Mendel's cold outbound. Each email has:
 1. A **master template** with static parts containing spintax `{a|b|c}` and clearly marked variable slots `{{VARIABLE_NAME}}`.
 2. A **variable definition list** explaining what each slot represents.
 3. **Per-industry variable fills** (6 industries).
 4. **Per-industry rendered examples** (spintax resolved to one option, variables filled — these are the send-ready emails).
 
-Principles applied across all three:
+### Rule (strict)
+
+- **Anything that varies per industry → variable** (`{{vertical}}`, `{{country}}`, `{{INDUSTRY_PAIN}}`, etc.).
+- **Anything static → spintax** (`{Hola|Hey|Buenas}`, `{Platicando|Hablando|Conversando}`, etc.).
+- **Rendered examples** show spintax resolved (one option picked) and industry variables filled. Merge variables (`{{firstName}}`, `{{companyName}}`) stay as merge tags.
+
+### Universal principles
+
 - Peer-framed openers (no accusation of prospect's company).
 - Value-probing CTAs (no cold "15 minutes" asks).
 - Customer logos as social proof (only confirmed customers).
@@ -44,7 +51,18 @@ Sender name + tagline handled by EmailBison `{SENDER_EMAIL_SIGNATURE}`. The send
 | Viva Aerobus | Verify with Alan | Logistics |
 | Pharma customer | None confirmed — anonymous framing | Pharma |
 
-## Variant overview
+## Sequence overview
+
+| Email | Goal | Thread | Word count |
+|---|---|---|---:|
+| **Email 1** (3 variants: A, B, C) | Plant problem + solution + soft ask for relevance | New thread | A: ~95-100 / B: ~95 / C: ~55-70 |
+| **Email 2** | Offer benchmark walkthrough; trigger engagement reply that leads to meeting | Same thread as Email 1 | ~45-55 |
+
+---
+
+# EMAIL 1
+
+## Email 1 — Variant overview
 
 | Variant | Voice | Word count | Best for |
 |---|---|---:|---|
@@ -52,11 +70,9 @@ Sender name + tagline handled by EmailBison `{SENDER_EMAIL_SIGNATURE}`. The send
 | **B** — Architectural | Direct, founder-confident, contrasts incumbent stack | ~95-100 | CFOs who pattern-match on architecture, tech-literate buyers |
 | **C** — Ultra-short | Compressed peer-pattern, mobile-first, value-probe | ~55-70 | Time-poor buyers, follow-up touches, mobile-dominant readers |
 
----
+## VARIANT A — Peer-framed
 
-# VARIANT A — Peer-framed
-
-## Master template
+### Master template
 
 ```
 {Hola|Hey|Buenas} {{firstName}},
@@ -72,19 +88,19 @@ Es la misma arquitectura que {usan|usa} {{CUSTOMER_LOGOS}} hoy.
 ¿{Vale|Tiene sentido|Hace sentido} {revisarlo|verlo|echarle un ojo} aplicado a {{companyName}}?
 ```
 
-## Variable definitions
+### Variable definitions
 
 | Variable | Definition |
 |---|---|
-| `{{INDUSTRY_PAIN}}` | Industry-specific pain stated as peer observation. One clause describing the friction faced by peers in this vertical. |
-| `{{SOLUTION_VERB_PHRASE}}` | Mendel's action stated as a verb + capabilities. Starts with a gerund ("poniendo", "aplicando", "capturando"). |
-| `{{OUTCOME_SENTENCE}}` | What the team gets after applying Mendel. Concrete, one sentence. |
-| `{{OBJECTION_DEFUSION}}` | Acknowledgment of likely objection + Mendel's specific counter. Pick objection #1 (existing stack), #2 (implementation complexity), or #3 (current process works). |
+| `{{INDUSTRY_PAIN}}` | Industry-specific pain stated as peer observation. One clause. |
+| `{{SOLUTION_VERB_PHRASE}}` | Mendel's action as gerund + capabilities. Starts with "poniendo", "aplicando", "capturando", etc. |
+| `{{OUTCOME_SENTENCE}}` | What the team gets after Mendel. Concrete, one sentence. |
+| `{{OBJECTION_DEFUSION}}` | Acknowledgment of likely objection + Mendel's specific counter. Pick objection #1, #2, or #3. |
 | `{{CUSTOMER_LOGOS}}` | One or two confirmed Mendel customer names relevant to the industry. |
 
-## Industry fills
+### Industry fills
 
-### Tech / Software
+#### Tech / Software
 
 | Variable | Value |
 |---|---|
@@ -97,7 +113,7 @@ Es la misma arquitectura que {usan|usa} {{CUSTOMER_LOGOS}} hoy.
 | `{{OBJECTION_DEFUSION}}` | Si ya operan con Concur + AMEX no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que esos tools no traen |
 | `{{CUSTOMER_LOGOS}}` | Mercado Libre y AB InBev |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -112,7 +128,7 @@ Es la misma arquitectura que usan Mercado Libre y AB InBev hoy.
 ¿Vale revisarlo aplicado a {{companyName}}?
 ```
 
-### Retail & CPG
+#### Retail & CPG
 
 | Variable | Value |
 |---|---|
@@ -125,7 +141,7 @@ Es la misma arquitectura que usan Mercado Libre y AB InBev hoy.
 | `{{OBJECTION_DEFUSION}}` | Si ya operan con Concur o la tarjeta del banco, no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que los globales no traen |
 | `{{CUSTOMER_LOGOS}}` | Walmart y OXXO |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hey {{firstName}},
 
@@ -140,7 +156,7 @@ Es la misma arquitectura que usan Walmart y OXXO hoy.
 ¿Tiene sentido verlo aplicado a {{companyName}}?
 ```
 
-### Logistics & Transportation
+#### Logistics & Transportation
 
 | Variable | Value |
 |---|---|
@@ -153,7 +169,7 @@ Es la misma arquitectura que usan Walmart y OXXO hoy.
 | `{{OBJECTION_DEFUSION}}` | Si ya usan tarjetas de flotilla del banco, no es para reemplazarlas: Mendel las integra junto a viáticos, CFDIs y ERP, con políticas que las tarjetas tradicionales no aplican |
 | `{{CUSTOMER_LOGOS}}` | Viva Aerobus |
 
-**Rendered example:**
+**Rendered:**
 ```
 Buenas {{firstName}},
 
@@ -168,7 +184,7 @@ Es la misma arquitectura que usa Viva Aerobus hoy.
 ¿Hace sentido echarle un ojo para {{companyName}}?
 ```
 
-### Manufacturing & Industrial
+#### Manufacturing & Industrial
 
 | Variable | Value |
 |---|---|
@@ -181,7 +197,7 @@ Es la misma arquitectura que usa Viva Aerobus hoy.
 | `{{OBJECTION_DEFUSION}}` | Sé que integrar con SAP suena pesado. Por diseño Mendel se conecta nativo a S/4HANA, no se le monta encima |
 | `{{CUSTOMER_LOGOS}}` | AB InBev |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -196,9 +212,9 @@ Es la misma arquitectura que usa AB InBev hoy.
 ¿Vale revisarlo aplicado a {{companyName}}?
 ```
 
-### Pharmaceutical & Healthcare
+#### Pharmaceutical & Healthcare
 
-⚠️ No confirmed pharma customer logo — verify with Alan before launch.
+⚠️ No confirmed pharma customer logo — verify with Alan.
 
 | Variable | Value |
 |---|---|
@@ -211,7 +227,7 @@ Es la misma arquitectura que usa AB InBev hoy.
 | `{{OBJECTION_DEFUSION}}` | Entiendo que sumar un sistema con datos sensibles suena complejo. Mendel se diseñó para escenarios regulados: controles por rol, ERP nativo, audit-ready desde día uno |
 | `{{CUSTOMER_LOGOS}}` | Operaciones farma con fuerza distribuida _(anonymous — verify with Alan)_ |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hey {{firstName}},
 
@@ -226,7 +242,7 @@ Operaciones farma con fuerza distribuida operan sobre esa arquitectura hoy.
 ¿Tiene sentido verlo aplicado a {{companyName}}?
 ```
 
-### Professional Services (Consulting / Audit / Legal)
+#### Professional Services (Consulting / Audit / Legal)
 
 | Variable | Value |
 |---|---|
@@ -239,7 +255,7 @@ Operaciones farma con fuerza distribuida operan sobre esa arquitectura hoy.
 | `{{OBJECTION_DEFUSION}}` | Sé que el proceso actual funciona. La pregunta es cuántas horas y cuánta deductibilidad se pierden cada mes que ya no vuelven |
 | `{{CUSTOMER_LOGOS}}` | KPMG |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -256,9 +272,9 @@ Es la misma arquitectura que usa KPMG hoy.
 
 ---
 
-# VARIANT B — Architectural / design-limit-led
+## VARIANT B — Architectural / design-limit-led
 
-## Master template
+### Master template
 
 ```
 {Hola|Hey|Buenas} {{firstName}},
@@ -272,19 +288,19 @@ Eso es lo que {corre|opera|funciona en} {{CUSTOMER_LOGOS}} hoy, y es por eso que
 ¿{Tendría sentido|Vale la pena revisarlo|Te resuena} para {{companyName}}?
 ```
 
-## Variable definitions
+### Variable definitions
 
 | Variable | Definition |
 |---|---|
-| `{{INCUMBENT_DESIGN_LIMIT}}` | Architectural fact about the incumbent stack (Concur, AMEX, bank cards, SAP, etc.). Neutral observation about what the stack was designed for. |
-| `{{INCUMBENT_QUALIFIER}}` | "Funciona si..." or similar qualifier that acknowledges the incumbent has a legitimate use case. |
-| `{{ARCHITECTURAL_SHIFT}}` | Mendel's approach stated as a shift: starts with "el control..." or "consolidando..." plus 3 capabilities. |
-| `{{CUSTOMER_LOGOS}}` | One or two confirmed Mendel customers running the new architecture. |
-| `{{OUTCOME_SENTENCE}}` | What changes after the shift, concrete and one sentence. |
+| `{{INCUMBENT_DESIGN_LIMIT}}` | Architectural fact about the incumbent stack. Neutral observation. |
+| `{{INCUMBENT_QUALIFIER}}` | "Funciona si..." qualifier acknowledging the incumbent's legitimate use case. |
+| `{{ARCHITECTURAL_SHIFT}}` | Mendel's approach as a shift: starts with "el control..." or "consolidando..." + 3 capabilities. |
+| `{{CUSTOMER_LOGOS}}` | Confirmed Mendel customer(s) running the new architecture. |
+| `{{OUTCOME_SENTENCE}}` | What changes after the shift, one sentence. |
 
-## Industry fills
+### Industry fills
 
-### Tech / Software
+#### Tech / Software
 
 | Variable | Value |
 |---|---|
@@ -297,7 +313,7 @@ Eso es lo que {corre|opera|funciona en} {{CUSTOMER_LOGOS}} hoy, y es por eso que
 | `{{CUSTOMER_LOGOS}}` | Mercado Libre |
 | `{{OUTCOME_SENTENCE}}` | finanzas pasa de validar tickets a aprobar reportes ya listos |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -310,7 +326,7 @@ Eso es lo que corre Mercado Libre hoy, y es por eso que finanzas pasa de validar
 ¿Tendría sentido para {{companyName}}?
 ```
 
-### Retail & CPG
+#### Retail & CPG
 
 | Variable | Value |
 |---|---|
@@ -323,7 +339,7 @@ Eso es lo que corre Mercado Libre hoy, y es por eso que finanzas pasa de validar
 | `{{CUSTOMER_LOGOS}}` | Walmart y OXXO |
 | `{{OUTCOME_SENTENCE}}` | el mes cierra el mismo día, sin hojas paralelas |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -336,7 +352,7 @@ Eso es lo que corren Walmart y OXXO hoy, y es por eso que el mes cierra el mismo
 ¿Vale la pena revisarlo para {{companyName}}?
 ```
 
-### Logistics & Transportation
+#### Logistics & Transportation
 
 | Variable | Value |
 |---|---|
@@ -349,7 +365,7 @@ Eso es lo que corren Walmart y OXXO hoy, y es por eso que el mes cierra el mismo
 | `{{CUSTOMER_LOGOS}}` | Viva Aerobus |
 | `{{OUTCOME_SENTENCE}}` | la conciliación pasa de manual a automática |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -362,7 +378,7 @@ Eso es lo que corre Viva Aerobus hoy, y es por eso que la conciliación pasa de 
 ¿Te resuena para {{companyName}}?
 ```
 
-### Manufacturing & Industrial
+#### Manufacturing & Industrial
 
 | Variable | Value |
 |---|---|
@@ -375,7 +391,7 @@ Eso es lo que corre Viva Aerobus hoy, y es por eso que la conciliación pasa de 
 | `{{CUSTOMER_LOGOS}}` | AB InBev |
 | `{{OUTCOME_SENTENCE}}` | el cierre deja de depender de ajustes manuales por planta |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -388,7 +404,7 @@ Eso es lo que corre AB InBev hoy, y es por eso que el cierre deja de depender de
 ¿Tendría sentido para {{companyName}}?
 ```
 
-### Pharmaceutical & Healthcare
+#### Pharmaceutical & Healthcare
 
 ⚠️ No confirmed pharma customer logo — verify with Alan.
 
@@ -403,7 +419,7 @@ Eso es lo que corre AB InBev hoy, y es por eso que el cierre deja de depender de
 | `{{CUSTOMER_LOGOS}}` | operaciones farma con fuerza distribuida _(anonymous — verify with Alan)_ |
 | `{{OUTCOME_SENTENCE}}` | el reporte deja de armarse a mano |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -416,7 +432,7 @@ Eso es lo que corren operaciones farma con fuerza distribuida hoy, y es por eso 
 ¿Te interesa ver cómo aplicaría a {{companyName}}?
 ```
 
-### Professional Services (Consulting / Audit / Legal)
+#### Professional Services
 
 | Variable | Value |
 |---|---|
@@ -429,7 +445,7 @@ Eso es lo que corren operaciones farma con fuerza distribuida hoy, y es por eso 
 | `{{CUSTOMER_LOGOS}}` | KPMG |
 | `{{OUTCOME_SENTENCE}}` | los partners aprueban desde el móvil y los reembolsos manuales desaparecen |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -444,9 +460,9 @@ Eso es lo que corre KPMG hoy, y es por eso que los partners aprueban desde el m�
 
 ---
 
-# VARIANT C — Ultra-short peer-pattern
+## VARIANT C — Ultra-short peer-pattern
 
-## Master template
+### Master template
 
 ```
 {Hola|Hey|Buenas} {{firstName}},
@@ -460,17 +476,17 @@ Es lo que {corre|corren} {{CUSTOMER_LOGOS}} hoy.
 ¿{Tendría sentido|Te resuena|Es algo que valga la pena} para {{companyName}}?
 ```
 
-## Variable definitions
+### Variable definitions
 
 | Variable | Definition |
 |---|---|
 | `{{INDUSTRY_PAIN}}` | Compressed industry-specific pain (one clause, peer-observed). |
-| `{{SOLUTION_VERB_PHRASE}}` | Mendel's action stated as verb(s) + capabilities. Starts with a verb in present tense ("aplica", "consolida", "automatiza"). One sentence. |
+| `{{SOLUTION_VERB_PHRASE}}` | Mendel's action as verb(s) + capabilities. Starts with present-tense verb ("aplica", "consolida", "automatiza"). |
 | `{{CUSTOMER_LOGOS}}` | Confirmed Mendel customer(s) relevant to the industry. |
 
-## Industry fills
+### Industry fills
 
-### Tech / Software
+#### Tech / Software
 
 | Variable | Value |
 |---|---|
@@ -481,7 +497,7 @@ Es lo que {corre|corren} {{CUSTOMER_LOGOS}} hoy.
 | `{{SOLUTION_VERB_PHRASE}}` | automatiza ese control con un agente de IA antes del cargo: política en tiempo real, CFDIs recuperados y ERP reconciliado |
 | `{{CUSTOMER_LOGOS}}` | Mercado Libre |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -494,7 +510,7 @@ Es lo que corre Mercado Libre hoy.
 ¿Tendría sentido para {{companyName}}?
 ```
 
-### Retail & CPG
+#### Retail & CPG
 
 | Variable | Value |
 |---|---|
@@ -505,7 +521,7 @@ Es lo que corre Mercado Libre hoy.
 | `{{SOLUTION_VERB_PHRASE}}` | aplica política por tienda en cada cargo, recupera los CFDIs automáticamente y reconcilia con el ERP en tiempo real |
 | `{{CUSTOMER_LOGOS}}` | Walmart y OXXO |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -518,7 +534,7 @@ Es lo que corren Walmart y OXXO hoy.
 ¿Es algo que valga la pena para {{companyName}}?
 ```
 
-### Logistics & Transportation
+#### Logistics & Transportation
 
 | Variable | Value |
 |---|---|
@@ -529,7 +545,7 @@ Es lo que corren Walmart y OXXO hoy.
 | `{{SOLUTION_VERB_PHRASE}}` | aplica reglas por conductor, proveedor y horario en el momento del cargo, con CFDIs integrados al ERP |
 | `{{CUSTOMER_LOGOS}}` | Viva Aerobus |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -542,7 +558,7 @@ Es lo que corre Viva Aerobus hoy.
 ¿Te resuena para {{companyName}}?
 ```
 
-### Manufacturing & Industrial
+#### Manufacturing & Industrial
 
 | Variable | Value |
 |---|---|
@@ -553,7 +569,7 @@ Es lo que corre Viva Aerobus hoy.
 | `{{SOLUTION_VERB_PHRASE}}` | consolida políticas multi-planta, recupera CFDIs entre plantas y se conecta nativo a SAP S/4HANA |
 | `{{CUSTOMER_LOGOS}}` | AB InBev |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -566,9 +582,9 @@ Es lo que corre AB InBev hoy.
 ¿Tendría sentido para {{companyName}}?
 ```
 
-### Pharmaceutical & Healthcare
+#### Pharmaceutical & Healthcare
 
-⚠️ No confirmed pharma customer logo — verify with Alan.
+⚠️ no confirmed pharma customer logo — verify with Alan
 
 | Variable | Value |
 |---|---|
@@ -579,7 +595,7 @@ Es lo que corre AB InBev hoy.
 | `{{SOLUTION_VERB_PHRASE}}` | aplica política por representante, audita en tiempo real y deja el reporte listo para exportar |
 | `{{CUSTOMER_LOGOS}}` | operaciones farma con fuerza distribuida _(anonymous — verify with Alan)_ |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -592,7 +608,7 @@ Es lo que corren operaciones farma con fuerza distribuida hoy.
 ¿Te interesa ver cómo aplicaría a {{companyName}}?
 ```
 
-### Professional Services (Consulting / Audit / Legal)
+#### Professional Services
 
 | Variable | Value |
 |---|---|
@@ -603,7 +619,7 @@ Es lo que corren operaciones farma con fuerza distribuida hoy.
 | `{{SOLUTION_VERB_PHRASE}}` | captura cada gasto billable por engagement en el momento del cargo, multi-país, con CFDI y reconciliación al ERP |
 | `{{CUSTOMER_LOGOS}}` | KPMG |
 
-**Rendered example:**
+**Rendered:**
 ```
 Hola {{firstName}},
 
@@ -618,63 +634,183 @@ Es lo que corre KPMG hoy.
 
 ---
 
-# Subject line library
+# EMAIL 2 — Lead magnet (benchmark walkthrough)
 
-Three options per industry. All use `{{firstName}}` and optionally `{{companyName}}`. Topic-led, never spammy, never accusatory. Pick 2 for A/B subject testing per campaign.
+**Goal:** trigger an engagement reply ("yes, interested") that the sender converts into a 20-min walkthrough call. The meeting booking happens in the follow-up reply, never in the cold body.
 
-### Tech / Software
-1. `{{firstName}}, automatización IA en {{companyName}}`
-2. `{{firstName}}, una idea para {{companyName}}`
-3. `Para {{firstName}}: control de spend`
+**Thread:** same thread as Email 1 (subject inherited, EmailBison auto-maintains thread via headers). No new subject line needed.
 
-### Retail & CPG
-1. `{{firstName}}, control multi-tienda en {{companyName}}`
-2. `{{firstName}}, una idea para {{companyName}}`
-3. `Para {{firstName}}: CFDIs en retail`
+## Master template
 
-### Logistics & Transportation
-1. `{{firstName}}, gestión de flotilla`
-2. `{{firstName}}, una idea para {{companyName}}`
-3. `Para {{firstName}}: per-diems y CFDIs`
+```
+{Hola|Hey|Buenas} {{firstName}},
 
-### Manufacturing & Industrial
-1. `{{firstName}}, control multi-planta en {{companyName}}`
-2. `{{firstName}}, una idea para {{companyName}}`
-3. `Para {{firstName}}: SAP y CFDIs`
+{Armamos|Construimos|Preparamos|Hicimos} un benchmark de cómo {{titlePlural}} {de|en} {{vertical}} en {{country}} {{PEER_ACTIVITIES}}. {Datos reales|Datos crudos|Información real}, anónimos.
 
-### Pharmaceutical & Healthcare
-1. `{{firstName}}, trazabilidad farma`
-2. `{{firstName}}, una idea para {{companyName}}`
-3. `Para {{firstName}}: reporte de transparencia`
+{Puedo mostrarte|Te puedo enseñar|Te puedo compartir} qué {hacen los otros|están haciendo los otros|hacen tus pares} y cómo se {puede aplicar|aplicaría|traduce} al setup de {{companyName}}, sin pitch.
 
-### Professional Services
-1. `{{firstName}}, gasto billable`
-2. `{{firstName}}, una idea para {{companyName}}`
-3. `Para {{firstName}}: multi-país y CFDI`
+{{CTA}}
+```
+
+## Variable definitions
+
+| Variable | Type | Definition |
+|---|---|---|
+| `{{firstName}}` | merge | Lead first name |
+| `{{companyName}}` | merge | Lead company |
+| `{{titlePlural}}` | campaign-level | Persona plural (`CFOs`) |
+| `{{vertical}}` | campaign-level | Industry word (per industry fill) |
+| `{{country}}` | campaign-level | Geography (per industry fill) |
+| `{{PEER_ACTIVITIES}}` | industry-specific | What peer CFOs in the benchmark are doing (3 activities in present continuous) |
+| `{{CTA}}` | A/B variant | One of two CTA variants (see below) |
+
+## CTA — two variants for A/B testing
+
+| Variant | Spintaxed CTA | Tone | When to use |
+|---|---|---|---|
+| **CTA-A — Engagement probe** | `¿Te {interesaría|sería útil|haría sentido}?` | Softer, value-first, lower commitment | Default for cold first send |
+| **CTA-B — Time choice** | `¿{Te funciona|Te queda|Te va} esta semana o la próxima?` | Direct, agenda-driving, binary | Default for warm leads (opened Email 1, prior signal) |
+
+Run both in parallel. CTA-A wins on reply rate. CTA-B wins on meetings booked per reply. Pick based on which metric matters more this campaign.
+
+## Industry fills
+
+Only `{{PEER_ACTIVITIES}}` and the universal campaign-level vars change per industry. Body skeleton is identical.
+
+| Industry | `{{vertical}}` | `{{country}}` | `{{PEER_ACTIVITIES}}` |
+|---|---|---|---|
+| Tech / Software | `tech` | `México` | están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real |
+| Retail & CPG | `retail` | `México` | están aplicando políticas por punto de venta, recuperando CFDIs automáticamente y cerrando el mes el mismo día |
+| Logistics & Transportation | `logística` | `México` | están aplicando reglas por conductor y proveedor, con CFDIs y per-diems auditados antes del cierre |
+| Manufacturing & Industrial | `manufactura` | `México` | están consolidando spend multi-planta con recuperación de CFDIs y reconciliación nativa a SAP S/4HANA |
+| Pharmaceutical & Healthcare ⚠️ | `farma` | `México` | están aplicando política por representante, auditando en tiempo real y dejando el reporte de transparencia listo para exportar |
+| Professional Services | `servicios profesionales` | `LatAm` | están capturando gasto billable por engagement, multi-país, con CFDI integrado al ERP |
+
+## Rendered examples
+
+### Tech / Software — CTA-A (engagement probe)
+```
+Hola {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} en tech en México están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real. Datos reales, anónimos.
+
+Puedo mostrarte qué hacen los otros y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te interesaría?
+```
+
+### Tech / Software — CTA-B (time choice)
+```
+Hola {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} en tech en México están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real. Datos reales, anónimos.
+
+Puedo mostrarte qué hacen los otros y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te funciona esta semana o la próxima?
+```
+
+### Retail & CPG — CTA-A
+```
+Hey {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} de retail en México están aplicando políticas por punto de venta, recuperando CFDIs automáticamente y cerrando el mes el mismo día. Datos reales, anónimos.
+
+Puedo mostrarte qué hacen los otros y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te sería útil?
+```
+
+### Logistics & Transportation — CTA-A
+```
+Buenas {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} en logística en México están aplicando reglas por conductor y proveedor, con CFDIs y per-diems auditados antes del cierre. Datos reales, anónimos.
+
+Puedo mostrarte qué hacen los otros y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te haría sentido?
+```
+
+### Manufacturing & Industrial — CTA-A
+```
+Hola {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} de manufactura en México están consolidando spend multi-planta con recuperación de CFDIs y reconciliación nativa a SAP S/4HANA. Datos reales, anónimos.
+
+Puedo mostrarte qué hacen los otros y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te interesaría?
+```
+
+### Pharmaceutical & Healthcare — CTA-A
+```
+Hey {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} de farma en México están aplicando política por representante, auditando en tiempo real y dejando el reporte de transparencia listo para exportar. Datos reales, anónimos.
+
+Puedo mostrarte qué hacen los otros y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te sería útil?
+```
+
+### Professional Services — CTA-A
+```
+Hola {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} de servicios profesionales en LatAm están capturando gasto billable por engagement, multi-país, con CFDI integrado al ERP. Datos reales, anónimos.
+
+Puedo mostrarte qué hacen los otros y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te haría sentido?
+```
+
+## Reply handling for Email 2
+
+| Reply | Sender response |
+|---|---|
+| "Sí, me interesa" / "Sí, mándalo" | `Perfecto, lo más útil es repasarlo en 20 min. ¿Te queda jueves o viernes esta semana?` — book the meeting in the reply, never in the cold body. |
+| "Mándame el PDF mejor" | `No tenemos PDF aparte porque depende del contexto. Si te queda 20 min te lo paso aplicado a {{companyName}}.` Push back to meeting once. |
+| "No me interesa" | Polite acknowledgment, move to long-term nurture. No push. |
+| No reply | Email 3 with a different angle (case study or direct demo offer). |
 
 ---
 
-# CTA library
+# Libraries
 
-All ask about relevance / value, never time. Rotate per send to add variation. Used in Variant A and Variant C (Variant B has its own embedded CTA).
+## Subject line library — Email 1
+
+Two patterns per industry. **Pattern A** (direct question) wins on replies; **Pattern C** (peer reference) wins on opens. A/B both per campaign.
+
+| Industry | Pattern A (direct question) | Pattern C (peer reference) |
+|---|---|---|
+| Tech | `{{firstName}}, ¿cómo manejan finanzas en {{companyName}}?` | `{{firstName}}, lo que hace Mercado Libre` |
+| Retail | `{{firstName}}, ¿cómo cierran el mes en {{companyName}}?` | `{{firstName}}, lo que hace Walmart` |
+| Logistics | `{{firstName}}, ¿cómo controlan flotilla en {{companyName}}?` | `{{firstName}}, lo que hace Viva Aerobus` |
+| Manufacturing | `{{firstName}}, ¿cómo reconcilian SAP en {{companyName}}?` | `{{firstName}}, lo que hace AB InBev` |
+| Pharma | `{{firstName}}, ¿cómo arman transparencia en {{companyName}}?` | `{{firstName}}, lo que cambió en farma` |
+| Professional Services | `{{firstName}}, ¿cómo capturan billable en {{companyName}}?` | `{{firstName}}, lo que hace KPMG` |
+
+## Subject line for Email 2
+
+Same thread as Email 1 — EmailBison inherits subject. No new subject required.
+
+## CTA library
+
+Used in Email 1 (and as alternatives for Email 2 CTA-A).
 
 | CTA | Tone | Use case |
 |---|---|---|
-| `¿Tendría sentido para {{companyName}}?` | Neutral, polite | Default for most industries |
+| `¿Tendría sentido para {{companyName}}?` | Neutral, polite | Default |
 | `¿Es algo que valga la pena revisar para {{companyName}}?` | Slightly more formal | Senior CFO targets |
 | `¿Te resuena para {{companyName}}?` | Casual, conversational | Younger or modern operations |
 | `¿Te interesa ver cómo aplicaría a {{companyName}}?` | Action-oriented | When ready to demo |
 | `¿Vale la pena profundizar en esto?` | Open-ended | Strategic conversations |
-| `¿Quieres que te mande más info?` | Lead-magnet friendly | When pairing with a PDF |
 | `¿Vale revisarlo aplicado a {{companyName}}?` | Direct, soft | Default for Variant A |
 | `¿Tiene sentido verlo aplicado a {{companyName}}?` | Neutral | Variant A alternate |
 | `¿Hace sentido echarle un ojo para {{companyName}}?` | Casual Mexican | Variant A alternate |
 
----
-
-# Objection defusion library (Variant A only)
-
-Three objection types. Pick one per industry — already mapped in Variant A industry fills.
+## Objection defusion library (Variant A only)
 
 | # | Trigger | Template |
 |---|---|---|
@@ -695,22 +831,25 @@ Three objection types. Pick one per industry — already mapped in Variant A ind
 
 # Spintax reference (master templates only — never in rendered examples)
 
-Spintax in master templates lets EmailBison randomize wording per send to reduce same-text detection. Format: `{option1|option2|option3}`. Rendered examples in this document show one resolved option per slot for human review.
+Spintax in master templates lets EmailBison randomize wording per send to reduce same-text detection. Format: `{option1|option2|option3}`. Rendered examples show one resolved option per slot for human review.
 
 **Allowed in spintax:**
 - Greetings: `{Hola|Hey|Buenas}`
-- Conversation verbs: `{Platicando|Hablando|Conversando}`, `{Cuando hablo|Cuando converso}`
-- Quantifiers: `{todos|casi todos|la mayoría|muchos}`
+- Conversation verbs: `{Platicando|Hablando|Conversando}`, `{Cuando hablo|Cuando converso|En las conversaciones}`
+- Quantifiers: `{todos|casi todos|la mayoría|muchos|varios}`
 - Verbs of speech: `{cuentan|describen|comparten}`
 - Pattern descriptors: `{el mismo patrón|el mismo cuadro|el mismo dolor|lo mismo}`
-- Connector verbs: `{de|en}`
+- Prepositions: `{de|en}`
 - State verbs: `{están|están moviendo|están migrando hacia}`
 - Operation verbs: `{corre|opera|funciona en}`, `{usan|usa}`, `{hoy|actualmente}`
-- CTA verbs: `{Vale|Tiene sentido|Hace sentido|Tendría sentido|Te resuena}`, `{revisarlo|verlo|echarle un ojo}`
+- Email-2 build verbs: `{Armamos|Construimos|Preparamos|Hicimos}`
+- Email-2 share verbs: `{Puedo mostrarte|Te puedo enseñar|Te puedo compartir}`, `{hacen los otros|están haciendo los otros|hacen tus pares}`, `{puede aplicar|aplicaría|traduce}`
+- Email-2 data descriptors: `{Datos reales|Datos crudos|Información real}`
+- CTA verbs: `{Vale|Tiene sentido|Hace sentido|Tendría sentido|Te resuena}`, `{revisarlo|verlo|echarle un ojo}`, `{interesaría|sería útil|haría sentido}`, `{Te funciona|Te queda|Te va}`
 
 **Never spintax:**
 - Merge variables (`{{firstName}}`, `{{companyName}}`, `{{titlePlural}}`, `{{vertical}}`, `{{country}}`)
-- Industry-specific variable slots (`{{INDUSTRY_PAIN}}`, `{{SOLUTION_VERB_PHRASE}}`, `{{OUTCOME_SENTENCE}}`, `{{OBJECTION_DEFUSION}}`, `{{CUSTOMER_LOGOS}}`, `{{INCUMBENT_DESIGN_LIMIT}}`, `{{INCUMBENT_QUALIFIER}}`, `{{ARCHITECTURAL_SHIFT}}`)
+- Industry-specific variable slots (`{{INDUSTRY_PAIN}}`, `{{SOLUTION_VERB_PHRASE}}`, `{{OUTCOME_SENTENCE}}`, `{{OBJECTION_DEFUSION}}`, `{{CUSTOMER_LOGOS}}`, `{{INCUMBENT_DESIGN_LIMIT}}`, `{{INCUMBENT_QUALIFIER}}`, `{{ARCHITECTURAL_SHIFT}}`, `{{PEER_ACTIVITIES}}`)
 - Customer names (Mercado Libre, KPMG, AB InBev, Walmart, OXXO, Viva Aerobus)
 - Product / brand references (Mendel, Concur, AMEX, SAP, S/4HANA, ERP, CFDI, SAT, HCP)
 - Industry capability descriptions (CFDIs recuperados, ERP integrado, etc.)
@@ -738,6 +877,7 @@ All variants and rendered examples comply with:
 - **Database build status:** 80% complete in Clay (ClickUp `868jea2rf`).
 - **Customer logo verification pending:** verify Walmart, OXXO, Viva Aerobus against `CLIENTES ACTUALES MENDEL.xlsx` (ClickUp `868jea2v0`) before launch.
 - **Pharma logo gap:** no confirmed pharma customer. Either request one from Alan or keep the anonymous "operaciones farma con fuerza distribuida" framing.
+- **Benchmark asset for Email 2:** the benchmark walkthrough needs to be built per vertical. Until then, the sender uses an internal Mendel deck during the call.
 - **Sender:** the Mendel sender (configured per campaign in EmailBison). Sender name and tagline managed by `{SENDER_EMAIL_SIGNATURE}` system variable.
 
 ---
@@ -746,7 +886,7 @@ All variants and rendered examples comply with:
 
 - [`../CLAUDE.md`](../CLAUDE.md) — Mendel client brain
 - [`outbound-campaigns.md`](outbound-campaigns.md) — operational source of truth
-- [`inherited-campaign-baseline.md`](inherited-campaign-baseline.md) — agency campaign analysis (the baseline to beat)
+- [`inherited-campaign-baseline.md`](inherited-campaign-baseline.md) — agency campaign analysis
 - [`../knowledge/dnc-blocklist.md`](../knowledge/dnc-blocklist.md) — DNC + competitor + bank + gov blocklist
 - [`../call-summaries/2026-04-28-onboarding-mendel-kinetyca.md`](../call-summaries/2026-04-28-onboarding-mendel-kinetyca.md)
 - [`../call-summaries/2026-05-05-strategy-mendel-kinetyca.md`](../call-summaries/2026-05-05-strategy-mendel-kinetyca.md)
