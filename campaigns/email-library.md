@@ -1,6 +1,6 @@
 # Mendel — Email Sequence Library
 
-_Language: Spanish (Mexico priority, "tú" form). Professional Services version uses LatAm framing._
+_Language: Spanish (Mexico priority, "tú" form). Professional Services uses LatAm framing._
 
 ## Overview
 
@@ -13,7 +13,7 @@ Email sequence for Mendel's cold outbound. Each email has:
 ### Strict rules
 
 - Anything that varies per industry → variable (`{{vertical}}`, `{{country}}`, `{{INDUSTRY_PAIN}}`, etc.).
-- Anything static within a variant → spintax in the master template (`{Hola|Hey|Buenas}`).
+- Anything static within a variant → spintax in the master template.
 - Per-industry variable values also have spintax — they hold 2+ phrasings of the same idea so each send picks one.
 - Rendered examples show one resolved option per slot; merge variables stay as merge tags.
 
@@ -23,6 +23,8 @@ Email sequence for Mendel's cold outbound. Each email has:
 - Value-probing CTAs (no cold "15 minutes" asks in the body).
 - Customer logos as social proof.
 - Topic-led subject lines personalized via `{{firstName}}` / `{{companyName}}`.
+- Tone: expert, professional, straightforward, calm. Not casual, not playful.
+- Mexican-CFO vernacular where natural: "perseguir tickets", "se nos van facturas", "esto lo hacemos en Excel".
 - Hard rules: no em dashes, no exclamation marks, no currency words, no signature in body, no bracket placeholders, one question per email.
 
 ## Universal merge variables
@@ -32,7 +34,7 @@ Email sequence for Mendel's cold outbound. Each email has:
 | `{{firstName}}` | Carlos | Lead enrichment |
 | `{{companyName}}` | Soriana | Lead enrichment |
 | `{{titlePlural}}` | CFOs | Persona plural — set per campaign |
-| `{{vertical}}` | tech | Industry word — set per campaign |
+| `{{vertical}}` | operaciones tech | Industry word — set per campaign |
 | `{{country}}` | México | Geography — set per campaign |
 
 Sender name and tagline handled by EmailBison `{SENDER_EMAIL_SIGNATURE}`. Never put a sender name or sign-off in the body.
@@ -41,19 +43,38 @@ Sender name and tagline handled by EmailBison `{SENDER_EMAIL_SIGNATURE}`. Never 
 
 | Customer | Used in |
 |---|---|
-| Mercado Libre | Tech |
-| AB InBev | Tech, Manufacturing |
-| KPMG | Professional Services |
+| Mercado Libre | Tech-enabled operations |
+| FEMSA | Tech-enabled operations, Retail & CPG |
+| AB InBev | Tech-enabled operations, Manufacturing |
 | Walmart | Retail & CPG |
-| OXXO / FEMSA | Retail & CPG |
-| Viva Aerobus | Logistics |
+| OXXO | Retail & CPG |
+| McDonald's | Retail & CPG (QSR) |
+| Tim Hortons | Retail & CPG (QSR) |
+| PetCo | Retail & CPG (specialty) |
+| Viva Aerobus | Logistics & Transportation |
+| Grupo Bafar | Manufacturing & Industrial |
+| Farmacia San Pablo | Pharmaceutical & Healthcare |
+| Merck | Pharmaceutical & Healthcare |
+| KPMG | Professional Services, Travel & Mobility |
+
+## Adjacent persona library (`{{titlePlural}}` options)
+
+| Vertical | Primary | Alternates |
+|---|---|---|
+| Tech-enabled operations | CFOs | Controllers, Finance Directors |
+| Retail & CPG | CFOs | Controllers, Procurement Directors |
+| Logistics & Transportation | CFOs | Operations Directors, Fleet Managers |
+| Manufacturing & Industrial | CFOs | Controllers, Procurement Directors |
+| Pharmaceutical & Healthcare | CFOs | Tax Managers, Compliance Directors |
+| Professional Services | CFOs | Operations Directors |
+| Travel & Mobility | Travel Managers | Event Managers, Mobility Directors |
 
 ## Sequence overview
 
 | Email | Variants | Goal | Thread |
 |---|---|---|---|
 | **Email 1** | A1, A2, B, C | Plant problem + solution + soft ask for relevance | New thread |
-| **Email 2** | Single template with CTA A/B test | Trigger engagement reply → 20-min walkthrough call | Same thread as Email 1 |
+| **Email 2** | Single template, CTA A/B/C | Trigger engagement reply → 20-min walkthrough or pilot | Same thread as Email 1 |
 
 ---
 
@@ -75,7 +96,7 @@ Sender name and tagline handled by EmailBison `{SENDER_EMAIL_SIGNATURE}`. Never 
 ### Master template
 
 ```
-{Hola|Hey|Buenas} {{firstName}},
+Hola {{firstName}},
 
 {Platicando|Hablando|Conversando} con {{titlePlural}} {de|en} {{vertical}} en {{country}}, {casi todos|todos|la mayoría} {cuentan|describen|comparten} {lo mismo|el mismo patrón|el mismo cuadro|el mismo dolor}: {{INDUSTRY_PAIN}}.
 
@@ -90,36 +111,36 @@ Es la misma arquitectura que {usan|usa} {{CUSTOMER_LOGOS}} hoy.
 
 | Variable | Definition |
 |---|---|
-| `{{INDUSTRY_PAIN}}` | Industry-specific pain stated as peer observation. Spintax of 2 phrasings. |
-| `{{SOLUTION_VERB_PHRASE}}` | Mendel's action as gerund + capabilities. Spintax of 2 phrasings. |
-| `{{OUTCOME_SENTENCE}}` | What the team gets after Mendel. Spintax of 2 phrasings. |
-| `{{CUSTOMER_LOGOS}}` | Customer(s) for the industry. Spintax of 2 phrasings. |
+| `{{INDUSTRY_PAIN}}` | Industry-specific pain stated as peer observation. Spintax of 2. |
+| `{{SOLUTION_VERB_PHRASE}}` | Mendel's action as gerund + capabilities. Spintax of 2. |
+| `{{OUTCOME_SENTENCE}}` | What the team gets after Mendel. Spintax of 2. |
+| `{{CUSTOMER_LOGOS}}` | Customer(s) for the industry. Spintax of 2. |
 
 ### Industry fills (A1)
 
-#### Tech / Software
+#### Tech-enabled operations
 
 ```
-vertical: tech
+vertical: operaciones tech
 country: México
 titlePlural: CFOs
 
-INDUSTRY_PAIN: {el área de tech crece más rápido que finanzas, y el equipo termina validando tickets en vez de cerrar el mes|tech escala antes que finanzas, y los gastos terminan revisándose semanas después}
+INDUSTRY_PAIN: {operaciones tech mueven volumen alto de transacciones que finanzas no alcanza a auditar en tiempo real, y el cierre depende de revisar tickets sueltos|el área de operaciones genera transacciones a velocidad de software, y finanzas todavía persigue tickets a velocidad manual}
 
 SOLUTION_VERB_PHRASE: {poniendo un agente de IA que audita cada transacción contra política antes del cargo|con un agente de IA que evalúa cada cargo contra política en el momento, no después}
 
-OUTCOME_SENTENCE: {Lo que llega a finanzas son reportes ya listos, no tickets sueltos, y el ERP queda reconciliado en tiempo real|Finanzas deja de validar tickets y empieza a aprobar reportes ya armados, con ERP reconciliado al instante}
+OUTCOME_SENTENCE: {Lo que llega a finanzas son reportes ya listos, no tickets sueltos, y el ERP queda reconciliado en tiempo real|Mercado Libre subió 30% la recuperación de facturas deductibles con esta arquitectura, después de reemplazar SAP Concur}
 
-CUSTOMER_LOGOS: {Mercado Libre y AB InBev|operaciones como Mercado Libre y AB InBev}
+CUSTOMER_LOGOS: {Mercado Libre y AB InBev|Mercado Libre y FEMSA}
 ```
 
 **Rendered:**
 ```
 Hola {{firstName}},
 
-Platicando con {{titlePlural}} en tech en México, casi todos cuentan lo mismo: el área de tech crece más rápido que finanzas, y el equipo termina validando tickets en vez de cerrar el mes.
+Platicando con {{titlePlural}} en operaciones tech en México, casi todos cuentan lo mismo: operaciones tech mueven volumen alto de transacciones que finanzas no alcanza a auditar en tiempo real, y el cierre depende de revisar tickets sueltos.
 
-Mendel resuelve eso poniendo un agente de IA que audita cada transacción contra política antes del cargo. Lo que llega a finanzas son reportes ya listos, no tickets sueltos, y el ERP queda reconciliado en tiempo real.
+Mendel resuelve eso poniendo un agente de IA que audita cada transacción contra política antes del cargo. Mercado Libre subió 30% la recuperación de facturas deductibles con esta arquitectura, después de reemplazar SAP Concur.
 
 Es la misma arquitectura que usan Mercado Libre y AB InBev hoy.
 
@@ -133,24 +154,24 @@ vertical: retail
 country: México
 titlePlural: CFOs
 
-INDUSTRY_PAIN: {con cientos de tiendas y miles de CFDIs al mes, el cierre del banco llega antes que el cierre interno|cada tienda mueve volumen propio, y el cierre interno depende de cuándo termine finanzas de procesar todos los CFDIs}
+INDUSTRY_PAIN: {con cientos de tiendas y miles de CFDIs al mes, el cierre del banco llega antes que el cierre interno|cada tienda mueve volumen propio, se nos van facturas al cierre y el equipo termina perseguiendo tickets uno por uno}
 
 SOLUTION_VERB_PHRASE: {aplicando políticas por tienda en el momento del cargo, recuperando los CFDIs automáticamente y mandándolos al ERP ya validados|con política por tienda evaluada en cada cargo, CFDIs recuperados automáticamente y reconciliación al ERP en tiempo real}
 
-OUTCOME_SENTENCE: {El equipo cierra el mes el mismo día, sin hojas paralelas|El cierre mensual pasa de varios días a uno, sin hojas paralelas}
+OUTCOME_SENTENCE: {El equipo cierra el mes el mismo día, sin hojas paralelas y sin perseguir tickets|El cierre mensual pasa de varios días a uno, con dashboard en tiempo real del spend por tienda}
 
-CUSTOMER_LOGOS: {Walmart y OXXO|cadenas como Walmart y OXXO}
+CUSTOMER_LOGOS: {Walmart, OXXO y FEMSA|cadenas como Walmart, OXXO y McDonald's}
 ```
 
 **Rendered:**
 ```
-Hey {{firstName}},
+Hola {{firstName}},
 
-Hablando con {{titlePlural}} de retail en México, casi todos cuentan lo mismo: con cientos de tiendas y miles de CFDIs al mes, el cierre del banco llega antes que el cierre interno.
+Hablando con {{titlePlural}} de retail en México, casi todos cuentan lo mismo: cada tienda mueve volumen propio, se nos van facturas al cierre y el equipo termina perseguiendo tickets uno por uno.
 
-Mendel resuelve eso aplicando políticas por tienda en el momento del cargo, recuperando los CFDIs automáticamente y mandándolos al ERP ya validados. El equipo cierra el mes el mismo día, sin hojas paralelas.
+Mendel resuelve eso aplicando políticas por tienda en el momento del cargo, recuperando los CFDIs automáticamente y mandándolos al ERP ya validados. El equipo cierra el mes el mismo día, sin hojas paralelas y sin perseguir tickets.
 
-Es la misma arquitectura que usan Walmart y OXXO hoy.
+Es la misma arquitectura que usan Walmart, OXXO y FEMSA hoy.
 
 ¿Tiene sentido verlo aplicado a {{companyName}}?
 ```
@@ -166,14 +187,14 @@ INDUSTRY_PAIN: {tarjetas de flotilla, casetas, combustible y viáticos repartido
 
 SOLUTION_VERB_PHRASE: {con reglas que se aplican en el momento del cargo: por conductor, por proveedor y por horario|aplicando reglas en cada cargo por conductor, proveedor y horario, antes de que el gasto cierre el ciclo}
 
-OUTCOME_SENTENCE: {Combustible y per-diems quedan auditados antes de la conciliación, no después|La conciliación pasa de manual y posterior al cierre a automática y previa al cargo}
+OUTCOME_SENTENCE: {Combustible y per-diems quedan auditados antes de la conciliación, no después|La conciliación pasa de manual y posterior al cierre a automática y previa al cargo, sin perseguir tickets entre conductores}
 
-CUSTOMER_LOGOS: {Viva Aerobus|operaciones como Viva Aerobus}
+CUSTOMER_LOGOS: {Viva Aerobus|operaciones tipo Viva Aerobus}
 ```
 
 **Rendered:**
 ```
-Buenas {{firstName}},
+Hola {{firstName}},
 
 Conversando con {{titlePlural}} en logística en México, la mayoría cuenta lo mismo: tarjetas de flotilla, casetas, combustible y viáticos repartidos entre conductores, sin visibilidad hasta el cierre del mes.
 
@@ -191,24 +212,24 @@ vertical: manufactura
 country: México
 titlePlural: CFOs
 
-INDUSTRY_PAIN: {spend operativo disperso entre plantas, reconciliación manual contra SAP, y deductibilidad que se pierde por CFDIs que nunca llegan|cada planta opera con su propio flujo de spend, el cierre depende de reconciliar todo a mano contra SAP, y la deductibilidad se pierde entre CFDIs traspapelados}
+INDUSTRY_PAIN: {spend operativo disperso entre plantas, reconciliación manual contra SAP, y deductibilidad que se pierde por CFDIs que nunca llegan|operaciones multi-entidad o multi-planta generan spend disperso entre subsidiarias, con reconciliación manual contra SAP o Contpaqi en cada cierre}
 
-SOLUTION_VERB_PHRASE: {con control de políticas multi-planta en tiempo real, recuperación automática de CFDIs entre plantas y reconciliación directa contra SAP S/4HANA|aplicando políticas multi-planta en tiempo real, recuperando CFDIs entre plantas y reconciliando nativamente contra SAP S/4HANA}
+SOLUTION_VERB_PHRASE: {con control de políticas multi-planta en tiempo real, recuperación automática de CFDIs entre plantas y reconciliación directa contra SAP S/4HANA|aplicando políticas multi-entidad en tiempo real, recuperando CFDIs entre plantas y reconciliando nativamente contra SAP, Contpaqi u Oracle}
 
-OUTCOME_SENTENCE: {El cierre deja de depender de ajustes manuales por planta|La conciliación entre plantas y SAP pasa de manual a automática, sin retrabajo al cierre}
+OUTCOME_SENTENCE: {El cierre deja de depender de ajustes manuales por planta|La conciliación entre plantas y ERP pasa de manual a automática, sin retrabajo al cierre}
 
-CUSTOMER_LOGOS: {AB InBev|operaciones como AB InBev}
+CUSTOMER_LOGOS: {AB InBev y Grupo Bafar|operaciones multi-planta tipo AB InBev}
 ```
 
 **Rendered:**
 ```
 Hola {{firstName}},
 
-Platicando con {{titlePlural}} de manufactura en México, todos describen el mismo patrón: spend operativo disperso entre plantas, reconciliación manual contra SAP, y deductibilidad que se pierde por CFDIs que nunca llegan.
+Platicando con {{titlePlural}} de manufactura en México, todos describen el mismo patrón: operaciones multi-entidad o multi-planta generan spend disperso entre subsidiarias, con reconciliación manual contra SAP o Contpaqi en cada cierre.
 
-Mendel resuelve eso con control de políticas multi-planta en tiempo real, recuperación automática de CFDIs entre plantas y reconciliación directa contra SAP S/4HANA. El cierre deja de depender de ajustes manuales por planta.
+Mendel resuelve eso aplicando políticas multi-entidad en tiempo real, recuperando CFDIs entre plantas y reconciliando nativamente contra SAP, Contpaqi u Oracle. La conciliación entre plantas y ERP pasa de manual a automática, sin retrabajo al cierre.
 
-Es la misma arquitectura que usa AB InBev hoy.
+Es la misma arquitectura que usan AB InBev y Grupo Bafar hoy.
 
 ¿Vale revisarlo aplicado a {{companyName}}?
 ```
@@ -224,20 +245,20 @@ INDUSTRY_PAIN: {las tarjetas de la fuerza de ventas, los viáticos con HCPs y lo
 
 SOLUTION_VERB_PHRASE: {aplicando política por representante en cada cargo y dejando la auditoría corriendo en tiempo real|con política por representante evaluada en cada cargo y auditoría continua en tiempo real}
 
-OUTCOME_SENTENCE: {El reporte de transparencia sale listo para exportar, sin armarlo a mano|La transparencia deja de ser un proyecto mensual y se convierte en un export}
+OUTCOME_SENTENCE: {El reporte de transparencia sale listo para exportar, sin armarlo a mano|La transparencia deja de ser un proyecto mensual y se convierte en un export listo para auditoría SAT}
 
-CUSTOMER_LOGOS: {operaciones farma con fuerza distribuida|equipos farma con fuerza de ventas activa}
+CUSTOMER_LOGOS: {Farmacia San Pablo y Merck|Farmacia San Pablo}
 ```
 
 **Rendered:**
 ```
-Hey {{firstName}},
+Hola {{firstName}},
 
 Hablando con {{titlePlural}} de farma en México, casi todos cuentan el mismo dolor: las tarjetas de la fuerza de ventas, los viáticos con HCPs y los reembolsos necesitan trazabilidad completa, y armar el reporte de transparencia se vuelve un proyecto mensual.
 
 Mendel resuelve eso aplicando política por representante en cada cargo y dejando la auditoría corriendo en tiempo real. El reporte de transparencia sale listo para exportar, sin armarlo a mano.
 
-Es la misma arquitectura que usan operaciones farma con fuerza distribuida hoy.
+Es la misma arquitectura que usan Farmacia San Pablo y Merck hoy.
 
 ¿Tiene sentido verlo aplicado a {{companyName}}?
 ```
@@ -255,7 +276,7 @@ SOLUTION_VERB_PHRASE: {capturando cada gasto billable por engagement desde el mo
 
 OUTCOME_SENTENCE: {Los partners aprueban desde el móvil y los reembolsos manuales desaparecen|Los partners firman desde el móvil y la cola de reembolsos manuales se acaba}
 
-CUSTOMER_LOGOS: {KPMG|firmas como KPMG}
+CUSTOMER_LOGOS: {KPMG|firmas multi-país como KPMG}
 ```
 
 **Rendered:**
@@ -271,6 +292,35 @@ Es la misma arquitectura que usa KPMG hoy.
 ¿Vale revisarlo aplicado a {{companyName}}?
 ```
 
+#### Travel & Mobility (Corporate Travel & Events)
+
+```
+vertical: viajes corporativos
+country: México
+titlePlural: Travel Managers
+
+INDUSTRY_PAIN: {viajes corporativos repartidos entre TMC, aprobaciones por mail y reembolsos manuales, sin política aplicada al momento del booking|el booking de viajes vive entre TMC, mail y Excel, y los gastos derivados llegan al cierre sin trazabilidad}
+
+SOLUTION_VERB_PHRASE: {con Mendel Viajes: booking, política, aprobaciones y gasto integrados en una sola plataforma|consolidando booking, política, aprobaciones y reembolsos en un solo flujo, con adopción online u offline visible en tiempo real}
+
+OUTCOME_SENTENCE: {Los viajeros reservan dentro de política sin chasear aprobaciones, y los gastos derivados llegan limpios al ERP|Travel Managers dejan de revisar bookings uno por uno y empiezan a ver el portafolio completo en tiempo real}
+
+CUSTOMER_LOGOS: {KPMG|firmas multi-país como KPMG}
+```
+
+**Rendered:**
+```
+Hola {{firstName}},
+
+Hablando con {{titlePlural}} de viajes corporativos en México, casi todos cuentan lo mismo: viajes corporativos repartidos entre TMC, aprobaciones por mail y reembolsos manuales, sin política aplicada al momento del booking.
+
+Mendel resuelve eso con Mendel Viajes: booking, política, aprobaciones y gasto integrados en una sola plataforma. Los viajeros reservan dentro de política sin chasear aprobaciones, y los gastos derivados llegan limpios al ERP.
+
+Es la misma arquitectura que usa KPMG hoy.
+
+¿Tiene sentido verlo aplicado a {{companyName}}?
+```
+
 ---
 
 ## VARIANT A2 — Peer-framed with objection defusion
@@ -280,7 +330,7 @@ Same as A1, plus one paragraph: `{{OBJECTION_DEFUSION}}` between the outcome and
 ### Master template
 
 ```
-{Hola|Hey|Buenas} {{firstName}},
+Hola {{firstName}},
 
 {Platicando|Hablando|Conversando} con {{titlePlural}} {de|en} {{vertical}} en {{country}}, {casi todos|todos|la mayoría} {cuentan|describen|comparten} {lo mismo|el mismo patrón|el mismo cuadro|el mismo dolor}: {{INDUSTRY_PAIN}}.
 
@@ -299,59 +349,65 @@ Same as A1, plus:
 
 | Variable | Definition |
 |---|---|
-| `{{OBJECTION_DEFUSION}}` | Acknowledgment of likely objection + Mendel's specific counter. Spintax of 2 phrasings. |
+| `{{OBJECTION_DEFUSION}}` | Acknowledgment of likely objection + Mendel's specific counter. Spintax of 2. Industry picks #1-6 from the library. |
 
 ### Industry fills (A2) — OBJECTION_DEFUSION values
 
-#### Tech / Software
+#### Tech-enabled operations (objection #1 — existing stack)
 
 ```
-OBJECTION_DEFUSION: {Si ya operan con Concur + AMEX no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que esos tools no traen|Si ya tienen Concur + AMEX, no se trata de cambiarlos: Mendel se conecta con ambos y suma CFDI, ERP y políticas en tiempo real en un solo lugar}
+OBJECTION_DEFUSION: {Si ya operan con Concur + AMEX no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que esos tools no traen|Si la directiva global usa Concur, Mendel empuja los datos al sistema global y suma la tropicalización México que el global no cubre — recuperación de CFDI, SAT y políticas en tiempo real}
 ```
 
-**Rendered (A2 Tech):**
+#### Retail & CPG (objection #4 — free bank cards)
+
+```
+OBJECTION_DEFUSION: {Sé que el banco te da tarjetas sin cargo extra. La diferencia no son las tarjetas, es la capa de software encima: política preventiva, recuperación de CFDIs y reconciliación con el ERP|Las tarjetas del banco están bien para pagar. Mendel se monta encima con la capa de software que el banco no tiene: control antes del cargo, recuperación de CFDI y reporte en tiempo real}
+```
+
+#### Logistics (objection #6 — driver/operator adoption)
+
+```
+OBJECTION_DEFUSION: {El miedo común es que los choferes no usen otra app. La acción del conductor se reduce a sacar foto al ticket — Mendel hace el resto: recuperación de CFDI, validación SAT y reconciliación con ERP|Adopción de conductores es la duda típica. Mendel reduce su parte a una foto del ticket; el resto corre en automático en el back-office}
+```
+
+#### Manufacturing (objection #2 — implementation / SAP)
+
+```
+OBJECTION_DEFUSION: {Sé que integrar con SAP suena pesado. La implementación va con acompañamiento end-to-end del equipo Mendel, no es un proyecto IT pesado del lado tuyo. Por diseño se conecta nativo a S/4HANA|Entiendo que sumar algo encima de SAP suena pesado. Por diseño Mendel se conecta nativo a S/4HANA, no se agrega como capa adicional, y el rollout va con acompañamiento white-glove}
+```
+
+#### Pharma (objection #2 — implementation / compliance)
+
+```
+OBJECTION_DEFUSION: {Entiendo que sumar un sistema con datos sensibles suena complejo. Mendel se diseñó para escenarios regulados: controles por rol, ERP nativo, audit-ready desde día uno, y la implementación corre con acompañamiento end-to-end|Sé que un sistema con datos sensibles requiere cuidado. Mendel se construyó para escenarios regulados — controles por rol, ERP nativo, audit-ready desde el inicio — y la implementación va con white-glove del equipo Mendel}
+```
+
+#### Professional Services (objection #3 — current process works)
+
+```
+OBJECTION_DEFUSION: {Sé que el proceso actual funciona. La pregunta es cuántas horas y cuánta deductibilidad se pierden cada mes que ya no vuelven|Entiendo que el flujo actual funciona. El punto es cuántas horas operativas y cuánta deductibilidad se pierden cada cierre y no regresan}
+```
+
+#### Travel & Mobility (objection #1 — existing TMC)
+
+```
+OBJECTION_DEFUSION: {Si ya usan un TMC, no es para reemplazarlo: Mendel Viajes lo conecta junto a política, aprobaciones y gasto, con la capacidad de aplicar reglas al momento del booking|Si ya tienen un TMC, Mendel Viajes no lo cambia: lo conecta con política, aprobaciones y gasto derivado en un solo flujo}
+```
+
+**Rendered example (A2 Tech-enabled operations):**
 ```
 Hola {{firstName}},
 
-Platicando con {{titlePlural}} en tech en México, casi todos cuentan lo mismo: el área de tech crece más rápido que finanzas, y el equipo termina validando tickets en vez de cerrar el mes.
+Platicando con {{titlePlural}} en operaciones tech en México, casi todos cuentan lo mismo: operaciones tech mueven volumen alto de transacciones que finanzas no alcanza a auditar en tiempo real, y el cierre depende de revisar tickets sueltos.
 
-Mendel resuelve eso poniendo un agente de IA que audita cada transacción contra política antes del cargo. Lo que llega a finanzas son reportes ya listos, no tickets sueltos, y el ERP queda reconciliado en tiempo real.
+Mendel resuelve eso poniendo un agente de IA que audita cada transacción contra política antes del cargo. Mercado Libre subió 30% la recuperación de facturas deductibles con esta arquitectura, después de reemplazar SAP Concur.
 
-Si ya operan con Concur + AMEX no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que esos tools no traen.
+Si la directiva global usa Concur, Mendel empuja los datos al sistema global y suma la tropicalización México que el global no cubre — recuperación de CFDI, SAT y políticas en tiempo real.
 
 Es la misma arquitectura que usan Mercado Libre y AB InBev hoy.
 
 ¿Vale revisarlo aplicado a {{companyName}}?
-```
-
-#### Retail & CPG
-
-```
-OBJECTION_DEFUSION: {Si ya operan con Concur o la tarjeta del banco, no es para reemplazarlos: Mendel los integra junto a CFDI y ERP en una sola plataforma, con las capacidades LatAm que los globales no traen|Si ya tienen Concur o la tarjeta del banco, Mendel no los cambia: los conecta junto a CFDI y ERP en un solo lugar, con las capacidades LatAm que los globales no cubren}
-```
-
-#### Logistics
-
-```
-OBJECTION_DEFUSION: {Si ya usan tarjetas de flotilla del banco, no es para reemplazarlas: Mendel las integra junto a viáticos, CFDIs y ERP, con políticas que las tarjetas tradicionales no aplican|Si ya tienen tarjetas de flotilla del banco, Mendel no las cambia: las conecta junto a viáticos, CFDIs y ERP, con políticas que las tradicionales no soportan}
-```
-
-#### Manufacturing
-
-```
-OBJECTION_DEFUSION: {Sé que integrar con SAP suena pesado. Por diseño Mendel se conecta nativo a S/4HANA, no se le monta encima|Entiendo que sumar algo encima de SAP suena pesado. Por diseño Mendel se conecta nativo a S/4HANA, no se agrega como capa adicional}
-```
-
-#### Pharma
-
-```
-OBJECTION_DEFUSION: {Entiendo que sumar un sistema con datos sensibles suena complejo. Mendel se diseñó para escenarios regulados: controles por rol, ERP nativo, audit-ready desde día uno|Sé que un sistema con datos sensibles requiere cuidado. Mendel se construyó para escenarios regulados: controles por rol, ERP nativo y audit-ready desde el inicio}
-```
-
-#### Professional Services
-
-```
-OBJECTION_DEFUSION: {Sé que el proceso actual funciona. La pregunta es cuántas horas y cuánta deductibilidad se pierden cada mes que ya no vuelven|Entiendo que el flujo actual funciona. El punto es cuántas horas operativas y cuánta deductibilidad se pierden cada cierre y no regresan}
 ```
 
 ---
@@ -361,7 +417,7 @@ OBJECTION_DEFUSION: {Sé que el proceso actual funciona. La pregunta es cuántas
 ### Master template
 
 ```
-{Hola|Hey|Buenas} {{firstName}},
+Hola {{firstName}},
 
 {{INCUMBENT_DESIGN_LIMIT}}. {{INCUMBENT_QUALIFIER}}.
 
@@ -376,18 +432,18 @@ Eso es lo que {corre|opera|funciona en} {{CUSTOMER_LOGOS}} hoy, y es por eso que
 
 | Variable | Definition |
 |---|---|
-| `{{INCUMBENT_DESIGN_LIMIT}}` | Architectural fact about the incumbent stack. Spintax of 2 phrasings. |
-| `{{INCUMBENT_QUALIFIER}}` | "Funciona si..." qualifier. Spintax of 2 phrasings. |
-| `{{ARCHITECTURAL_SHIFT}}` | Mendel's approach as a shift. Spintax of 2 phrasings. |
-| `{{CUSTOMER_LOGOS}}` | Customer(s). Spintax of 2 phrasings. |
-| `{{OUTCOME_SENTENCE}}` | What changes after the shift. Spintax of 2 phrasings. |
+| `{{INCUMBENT_DESIGN_LIMIT}}` | Architectural fact about incumbent stack. Spintax of 2. |
+| `{{INCUMBENT_QUALIFIER}}` | "Funciona si..." qualifier. Spintax of 2. |
+| `{{ARCHITECTURAL_SHIFT}}` | Mendel's approach as a shift. Spintax of 2. |
+| `{{CUSTOMER_LOGOS}}` | Customer(s). Spintax of 2. |
+| `{{OUTCOME_SENTENCE}}` | What changes after the shift. Spintax of 2. |
 
 ### Industry fills (B)
 
-#### Tech / Software
+#### Tech-enabled operations
 
 ```
-vertical: tech
+vertical: operaciones tech
 country: México
 titlePlural: CFOs
 
@@ -397,9 +453,9 @@ INCUMBENT_QUALIFIER: {Funciona bien si lo que necesitas es visibilidad post-cier
 
 ARCHITECTURAL_SHIFT: {moviendo el control antes de la transacción: un agente de IA evalúa cada cargo contra política, recupera el CFDI y reconcilia con el ERP en tiempo real|corriendo el control antes del cargo con un agente de IA, recuperación automática de CFDIs y reconciliación al ERP en vivo}
 
-CUSTOMER_LOGOS: {Mercado Libre|operaciones como Mercado Libre}
+CUSTOMER_LOGOS: {Mercado Libre|Mercado Libre y FEMSA}
 
-OUTCOME_SENTENCE: {finanzas pasa de validar tickets a aprobar reportes ya listos|el equipo financiero deja de revisar tickets sueltos y empieza a aprobar reportes armados}
+OUTCOME_SENTENCE: {Mercado Libre subió 30% la recuperación de facturas deductibles después de reemplazar SAP Concur con esta arquitectura|finanzas pasa de validar tickets a aprobar reportes ya listos, con CFDI y ERP integrados al flujo}
 ```
 
 **Rendered:**
@@ -408,9 +464,9 @@ Hola {{firstName}},
 
 Concur + AMEX se diseñó para reportar gastos después de que pasan. Funciona bien si lo que necesitas es visibilidad post-cierre.
 
-Cuando hablo con {{titlePlural}} en tech en México, muchos ya están moviendo el control antes de la transacción: un agente de IA evalúa cada cargo contra política, recupera el CFDI y reconcilia con el ERP en tiempo real.
+Cuando hablo con {{titlePlural}} en operaciones tech en México, muchos ya están moviendo el control antes de la transacción: un agente de IA evalúa cada cargo contra política, recupera el CFDI y reconcilia con el ERP en tiempo real.
 
-Eso es lo que corre Mercado Libre hoy, y es por eso que finanzas pasa de validar tickets a aprobar reportes ya listos.
+Eso es lo que corre Mercado Libre hoy, y es por eso que Mercado Libre subió 30% la recuperación de facturas deductibles después de reemplazar SAP Concur con esta arquitectura.
 
 ¿Tendría sentido para {{companyName}}?
 ```
@@ -424,13 +480,13 @@ titlePlural: CFOs
 
 INCUMBENT_DESIGN_LIMIT: {Concur + la tarjeta del banco se diseñó para reportar después del estado de cuenta|El stack tradicional, Concur más tarjeta del banco, se construyó para reportar al cierre, no para controlar por tienda}
 
-INCUMBENT_QUALIFIER: {Funciona si solo necesitas el report mensual|Bien si lo que se busca es el resumen mensual}
+INCUMBENT_QUALIFIER: {Funciona si solo necesitas el report mensual|Bien si lo que se busca es el resumen mensual y nadie persigue tickets}
 
 ARCHITECTURAL_SHIFT: {controlando antes de la transacción: política por tienda en el momento del cargo, recuperación automática de CFDIs y reconciliación al ERP en tiempo real|aplicando control antes del cargo: política por tienda, CFDIs recuperados automáticamente y reconciliación con el ERP en vivo}
 
-CUSTOMER_LOGOS: {Walmart y OXXO|cadenas como Walmart y OXXO}
+CUSTOMER_LOGOS: {Walmart, OXXO y FEMSA|cadenas como Walmart, OXXO y McDonald's}
 
-OUTCOME_SENTENCE: {el mes cierra el mismo día, sin hojas paralelas|el cierre baja de varios días a uno, sin trabajo manual paralelo}
+OUTCOME_SENTENCE: {el mes cierra el mismo día, sin hojas paralelas|el cierre baja de varios días a uno, sin perseguir tickets entre tiendas}
 ```
 
 **Rendered:**
@@ -441,7 +497,7 @@ Concur + la tarjeta del banco se diseñó para reportar después del estado de c
 
 Cuando hablo con {{titlePlural}} de retail en México, muchos ya están controlando antes de la transacción: política por tienda en el momento del cargo, recuperación automática de CFDIs y reconciliación al ERP en tiempo real.
 
-Eso es lo que corren Walmart y OXXO hoy, y es por eso que el mes cierra el mismo día, sin hojas paralelas.
+Eso es lo que corren Walmart, OXXO y FEMSA hoy, y es por eso que el mes cierra el mismo día, sin hojas paralelas.
 
 ¿Vale la pena revisarlo para {{companyName}}?
 ```
@@ -453,9 +509,9 @@ vertical: logística
 country: México
 titlePlural: CFOs
 
-INCUMBENT_DESIGN_LIMIT: {Las tarjetas de flotilla del banco se diseñaron para pagar combustible|La tarjeta de flotilla bancaria se construyó como medio de pago, no como sistema de control}
+INCUMBENT_DESIGN_LIMIT: {Las tarjetas de flotilla del banco y las valeras se diseñaron para pagar combustible|La tarjeta de flotilla bancaria y la valera se construyeron como medio de pago, no como sistema de control}
 
-INCUMBENT_QUALIFIER: {Visibilidad por conductor y políticas por proveedor no estaban en el alcance original|Reglas por conductor o proveedor no estaban en el diseño original}
+INCUMBENT_QUALIFIER: {Visibilidad por conductor y políticas por proveedor no estaban en el alcance original|Reglas por conductor o proveedor, y casetas o per-diems integrados, no estaban en el diseño original}
 
 ARCHITECTURAL_SHIFT: {moviendo el control al momento del cargo: reglas por conductor, por proveedor y por horario, con CFDIs y per-diems auditados antes del cierre|corriendo el control al momento del cargo con reglas por conductor, proveedor y horario, y CFDIs y per-diems auditados antes del cierre}
 
@@ -468,7 +524,7 @@ OUTCOME_SENTENCE: {la conciliación pasa de manual a automática|la conciliació
 ```
 Hola {{firstName}},
 
-Las tarjetas de flotilla del banco se diseñaron para pagar combustible. Visibilidad por conductor y políticas por proveedor no estaban en el alcance original.
+Las tarjetas de flotilla del banco y las valeras se diseñaron para pagar combustible. Visibilidad por conductor y políticas por proveedor no estaban en el alcance original.
 
 Cuando hablo con {{titlePlural}} en logística en México, muchos ya están moviendo el control al momento del cargo: reglas por conductor, por proveedor y por horario, con CFDIs y per-diems auditados antes del cierre.
 
@@ -484,24 +540,24 @@ vertical: manufactura
 country: México
 titlePlural: CFOs
 
-INCUMBENT_DESIGN_LIMIT: {El stack típico en manufactura, Concur, tarjetas del banco y SAP, se construyó como tres sistemas separados|La realidad típica en manufactura es operar con tres sistemas separados: Concur para reportes, tarjetas para spend, SAP para ERP}
+INCUMBENT_DESIGN_LIMIT: {El stack típico en manufactura — Concur, tarjetas del banco y SAP o Contpaqi — se construyó como tres sistemas separados|La realidad típica en manufactura es operar con tres sistemas separados: Concur para reportes, tarjetas para spend, SAP o Contpaqi para ERP}
 
-INCUMBENT_QUALIFIER: {Cada integración entre ellos es un punto de falla|Cada handoff entre esos sistemas es un punto de falla}
+INCUMBENT_QUALIFIER: {Cada integración entre ellos es un punto de falla|Cada handoff entre esos sistemas es un punto de falla en cada cierre}
 
-ARCHITECTURAL_SHIFT: {consolidando: control de políticas multi-planta en tiempo real, recuperación automática de CFDIs entre plantas, y reconciliación nativa contra SAP S/4HANA|unificando los tres flujos en uno: políticas multi-planta en tiempo real, CFDIs recuperados entre plantas y reconciliación nativa con SAP S/4HANA}
+ARCHITECTURAL_SHIFT: {consolidando: control de políticas multi-planta en tiempo real, recuperación automática de CFDIs entre plantas, y reconciliación nativa contra SAP S/4HANA, Contpaqi u Oracle|unificando los tres flujos en uno: políticas multi-entidad en tiempo real, CFDIs recuperados entre plantas y reconciliación nativa con SAP, Contpaqi o el ERP de tu stack}
 
-CUSTOMER_LOGOS: {AB InBev|operaciones como AB InBev}
+CUSTOMER_LOGOS: {AB InBev y Grupo Bafar|operaciones multi-planta como AB InBev}
 
-OUTCOME_SENTENCE: {el cierre deja de depender de ajustes manuales por planta|el equipo financiero deja de armar ajustes por planta y empieza a aprobar lo que SAP ya recibió validado}
+OUTCOME_SENTENCE: {el cierre deja de depender de ajustes manuales por planta|el equipo financiero deja de armar ajustes por planta y empieza a aprobar lo que el ERP ya recibió validado}
 ```
 
 **Rendered:**
 ```
 Hola {{firstName}},
 
-El stack típico en manufactura, Concur, tarjetas del banco y SAP, se construyó como tres sistemas separados. Cada integración entre ellos es un punto de falla.
+El stack típico en manufactura — Concur, tarjetas del banco y SAP o Contpaqi — se construyó como tres sistemas separados. Cada integración entre ellos es un punto de falla.
 
-Cuando hablo con {{titlePlural}} de manufactura en México, muchos ya están consolidando: control de políticas multi-planta en tiempo real, recuperación automática de CFDIs entre plantas, y reconciliación nativa contra SAP S/4HANA.
+Cuando hablo con {{titlePlural}} de manufactura en México, muchos ya están consolidando: control de políticas multi-planta en tiempo real, recuperación automática de CFDIs entre plantas, y reconciliación nativa contra SAP S/4HANA, Contpaqi u Oracle.
 
 Eso es lo que corre AB InBev hoy, y es por eso que el cierre deja de depender de ajustes manuales por planta.
 
@@ -515,13 +571,13 @@ vertical: farma
 country: México
 titlePlural: CFOs
 
-INCUMBENT_DESIGN_LIMIT: {Las herramientas tradicionales de expense management no se diseñaron pensando en compliance farma|Los sistemas tradicionales de expense management no se construyeron con compliance farma en mente}
+INCUMBENT_DESIGN_LIMIT: {Las herramientas tradicionales de expense management no se diseñaron pensando en compliance farma|Los sistemas tradicionales de expense management no se construyeron con compliance farma o audit-ready en mente}
 
 INCUMBENT_QUALIFIER: {Trazabilidad por HCP y reporte de transparencia terminan siendo proyectos manuales mensuales|La trazabilidad por HCP y el reporte de transparencia terminan armándose a mano cada mes}
 
-ARCHITECTURAL_SHIFT: {moviendo esa trazabilidad al momento del cargo: política por representante, auditoría en tiempo real, reporte de transparencia listo para exportar|corriendo la trazabilidad al momento del cargo con política por representante, auditoría continua y reporte de transparencia listo para exportar}
+ARCHITECTURAL_SHIFT: {moviendo esa trazabilidad al momento del cargo: política por representante, auditoría en tiempo real, reporte de transparencia listo para exportar|corriendo la trazabilidad al momento del cargo con política por representante, auditoría continua y reporte de transparencia listo para auditoría SAT}
 
-CUSTOMER_LOGOS: {operaciones farma con fuerza distribuida|equipos farma con fuerza de ventas activa}
+CUSTOMER_LOGOS: {Farmacia San Pablo y Merck|Farmacia San Pablo}
 
 OUTCOME_SENTENCE: {el reporte deja de armarse a mano|el equipo deja de construir el reporte de transparencia cada mes}
 ```
@@ -534,7 +590,7 @@ Las herramientas tradicionales de expense management no se diseñaron pensando e
 
 Cuando hablo con {{titlePlural}} de farma en México, muchos ya están moviendo esa trazabilidad al momento del cargo: política por representante, auditoría en tiempo real, reporte de transparencia listo para exportar.
 
-Eso es lo que corren operaciones farma con fuerza distribuida hoy, y es por eso que el reporte deja de armarse a mano.
+Eso es lo que corren Farmacia San Pablo y Merck hoy, y es por eso que el reporte deja de armarse a mano.
 
 ¿Te resuena para {{companyName}}?
 ```
@@ -546,13 +602,13 @@ vertical: servicios profesionales
 country: LatAm
 titlePlural: CFOs
 
-INCUMBENT_DESIGN_LIMIT: {Capturar gasto billable por engagement nunca fue para lo que se diseñó Concur|Concur no se diseñó para capturar gasto billable por engagement}
+INCUMBENT_DESIGN_LIMIT: {Capturar gasto billable por engagement nunca fue para lo que se diseñó Concur|Concur no se diseñó para capturar gasto billable por engagement multi-país}
 
 INCUMBENT_QUALIFIER: {Tampoco soporta CFDI ni operación multi-país de forma nativa|Tampoco fue construido con CFDI o operación multi-país en mente}
 
 ARCHITECTURAL_SHIFT: {consolidando: gasto billable capturado en el momento del cargo, multi-país, con CFDI integrado y reconciliación directa al ERP|unificando: gasto billable por engagement en el momento del cargo, multi-país, con CFDI y ERP integrados}
 
-CUSTOMER_LOGOS: {KPMG|firmas como KPMG}
+CUSTOMER_LOGOS: {KPMG|firmas multi-país como KPMG}
 
 OUTCOME_SENTENCE: {los partners aprueban desde el móvil y los reembolsos manuales desaparecen|los partners firman desde el móvil y la cola de reembolsos manuales se acaba}
 ```
@@ -570,6 +626,37 @@ Eso es lo que corre KPMG hoy, y es por eso que los partners aprueban desde el m�
 ¿Vale la pena revisarlo para {{companyName}}?
 ```
 
+#### Travel & Mobility
+
+```
+vertical: viajes corporativos
+country: México
+titlePlural: Travel Managers
+
+INCUMBENT_DESIGN_LIMIT: {El stack típico de travel — TMC, mail, hojas de aprobación, reembolsos — se diseñó como sistemas separados|TMC, mail y reembolsos manuales se construyeron para reservar y reportar, no para controlar política al booking}
+
+INCUMBENT_QUALIFIER: {Funciona si la prioridad es solo bookear, no controlar el gasto derivado|Bien si lo único que se necesita es la reservación}
+
+ARCHITECTURAL_SHIFT: {consolidando booking, política, aprobaciones y gasto en una sola plataforma, con adopción online u offline visible en tiempo real|unificando booking y expense en un flujo, con política aplicada al momento de la reserva y gasto derivado integrado al ERP}
+
+CUSTOMER_LOGOS: {KPMG|firmas multi-país como KPMG}
+
+OUTCOME_SENTENCE: {los viajeros reservan dentro de política sin chasear aprobaciones|el cierre llega con todos los gastos de viaje ya categorizados, sin reembolsos manuales}
+```
+
+**Rendered:**
+```
+Hola {{firstName}},
+
+El stack típico de travel — TMC, mail, hojas de aprobación, reembolsos — se diseñó como sistemas separados. Funciona si la prioridad es solo bookear, no controlar el gasto derivado.
+
+Cuando hablo con {{titlePlural}} de viajes corporativos en México, muchos ya están consolidando booking, política, aprobaciones y gasto en una sola plataforma, con adopción online u offline visible en tiempo real.
+
+Eso es lo que corre KPMG hoy, y es por eso que los viajeros reservan dentro de política sin chasear aprobaciones.
+
+¿Tendría sentido para {{companyName}}?
+```
+
 ---
 
 ## VARIANT C — Ultra-short peer-pattern
@@ -577,7 +664,7 @@ Eso es lo que corre KPMG hoy, y es por eso que los partners aprueban desde el m�
 ### Master template
 
 ```
-{Hola|Hey|Buenas} {{firstName}},
+Hola {{firstName}},
 
 {Cuando hablo|Cuando converso} con {{titlePlural}} {de|en} {{vertical}} en {{country}}, {casi todos|la mayoría|muchos} {describen|cuentan|comparten} {el mismo patrón|lo mismo|el mismo dolor}: {{INDUSTRY_PAIN}}.
 
@@ -593,28 +680,15 @@ Es lo que {corre|corren} {{CUSTOMER_LOGOS}} hoy.
 | Variable | Definition |
 |---|---|
 | `{{INDUSTRY_PAIN}}` | Same library as A1 (spintax of 2). |
-| `{{SOLUTION_VERB_PHRASE_SHORT}}` | Mendel's action as present-tense verb + capabilities (compressed for C). Spintax of 2. |
+| `{{SOLUTION_VERB_PHRASE_SHORT}}` | Mendel's action as present-tense verb + capabilities (compressed). Spintax of 2. |
 | `{{CUSTOMER_LOGOS}}` | Same library as A1 (spintax of 2). |
 
 ### Industry fills (C) — SOLUTION_VERB_PHRASE_SHORT values
 
-#### Tech
+#### Tech-enabled operations
 
 ```
 SOLUTION_VERB_PHRASE_SHORT: {automatiza ese control con un agente de IA antes del cargo: política en tiempo real, CFDIs recuperados y ERP reconciliado|corre auditoría IA por transacción, recupera CFDIs y reconcilia con ERP en tiempo real}
-```
-
-**Rendered:**
-```
-Hola {{firstName}},
-
-Cuando hablo con {{titlePlural}} en tech en México, casi todos describen el mismo patrón: tech escala antes que finanzas, y los gastos terminan revisándose semanas después.
-
-Mendel automatiza ese control con un agente de IA antes del cargo: política en tiempo real, CFDIs recuperados y ERP reconciliado.
-
-Es lo que corre Mercado Libre hoy.
-
-¿Tendría sentido para {{companyName}}?
 ```
 
 #### Retail
@@ -632,13 +706,13 @@ SOLUTION_VERB_PHRASE_SHORT: {aplica reglas por conductor, proveedor y horario en
 #### Manufacturing
 
 ```
-SOLUTION_VERB_PHRASE_SHORT: {consolida políticas multi-planta, recupera CFDIs entre plantas y se conecta nativo a SAP S/4HANA|unifica políticas multi-planta con recuperación de CFDIs entre plantas y reconciliación nativa con SAP S/4HANA}
+SOLUTION_VERB_PHRASE_SHORT: {consolida políticas multi-planta, recupera CFDIs entre plantas y se conecta nativo a SAP, Contpaqi u Oracle|unifica políticas multi-entidad con recuperación de CFDIs entre plantas y reconciliación nativa con el ERP}
 ```
 
 #### Pharma
 
 ```
-SOLUTION_VERB_PHRASE_SHORT: {aplica política por representante, audita en tiempo real y deja el reporte listo para exportar|corre política por representante, auditoría continua y reporte de transparencia listo para exportar}
+SOLUTION_VERB_PHRASE_SHORT: {aplica política por representante, audita en tiempo real y deja el reporte listo para exportar|corre política por representante, auditoría continua y reporte de transparencia audit-ready}
 ```
 
 #### Professional Services
@@ -647,18 +721,24 @@ SOLUTION_VERB_PHRASE_SHORT: {aplica política por representante, audita en tiemp
 SOLUTION_VERB_PHRASE_SHORT: {captura cada gasto billable por engagement en el momento del cargo, multi-país, con CFDI y reconciliación al ERP|corre captura de gasto billable por engagement, multi-país, con CFDI integrado al ERP}
 ```
 
+#### Travel & Mobility
+
+```
+SOLUTION_VERB_PHRASE_SHORT: {consolida booking, política, aprobaciones y gasto de viaje en una plataforma, con dashboard en tiempo real|unifica booking y expense con política aplicada al momento de la reserva}
+```
+
 ---
 
 # EMAIL 2 — Lead magnet (benchmark walkthrough)
 
-**Goal:** trigger an engagement reply ("sí, me interesa") that the sender converts into a 20-min walkthrough call. Meeting booking happens in the reply, never in the cold body.
+**Goal:** trigger an engagement reply ("sí, me interesa") that the sender converts into a 20-min walkthrough call or a low-risk pilot. Meeting booking happens in the reply, never in the cold body.
 
 **Thread:** same thread as Email 1 (subject inherited via EmailBison headers). No new subject line needed.
 
 ## Master template
 
 ```
-{Hola|Hey|Buenas} {{firstName}},
+Hola {{firstName}},
 
 {Armamos|Construimos|Preparamos|Hicimos} un benchmark de cómo {{titlePlural}} {de|en} {{vertical}} en {{country}} {{PEER_ACTIVITIES}}. {Datos reales|Datos crudos|Información real}, anónimos.
 
@@ -673,39 +753,40 @@ SOLUTION_VERB_PHRASE_SHORT: {captura cada gasto billable por engagement en el mo
 |---|---|---|
 | `{{firstName}}` | merge | Lead first name |
 | `{{companyName}}` | merge | Lead company |
-| `{{titlePlural}}` | campaign-level | Persona plural (`CFOs`) |
+| `{{titlePlural}}` | campaign-level | Persona plural |
 | `{{vertical}}` | campaign-level | Industry word |
 | `{{country}}` | campaign-level | Geography |
 | `{{PEER_ACTIVITIES}}` | industry-specific | What peers do (spintax of 2) |
 | `{{CUSTOMER_LOGOS}}` | industry-specific | Customer names (spintax of 2) |
-| `{{CTA}}` | A/B variant | One of two CTA variants |
+| `{{CTA}}` | A/B/C variant | One of three CTA variants |
 
-## CTA — two variants for A/B testing
+## CTA — three variants for A/B/C testing
 
-| Variant | Spintaxed CTA | Tone |
-|---|---|---|
-| **CTA-A — Engagement probe** | `¿Te {interesaría|sería útil|haría sentido}?` | Softer, value-first |
-| **CTA-B — Time choice** | `¿{Te funciona|Te queda|Te va} esta semana o la próxima?` | Direct, agenda-driving |
+| Variant | Spintaxed CTA | Tone | When to use |
+|---|---|---|---|
+| **CTA-A — Engagement probe** | `¿Te {interesaría|sería útil|haría sentido}?` | Softer, value-first | Default cold first send |
+| **CTA-B — Time choice** | `¿{Te funciona|Te queda|Te va} esta semana o la próxima?` | Direct, agenda-driving | Warm leads (Email 1 opened, prior signal) |
+| **CTA-C — Pilot offer** | `¿{Tendría sentido|Vale la pena armar} un piloto chico de 10 a 20 tarjetas en un equipo, con estimado de ROI antes/después?` | Concrete, low-risk | Mid-funnel touches, post-Email 1 reply with hesitation |
 
 ## Industry fills (Email 2)
 
-#### Tech / Software
+#### Tech-enabled operations
 
 ```
-vertical: tech
+vertical: operaciones tech
 country: México
 titlePlural: CFOs
 
 PEER_ACTIVITIES: {están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real|están moviendo el control de gastos a tiempo real con IA: auditoría por transacción, CFDIs recuperados y ERP reconciliado}
 
-CUSTOMER_LOGOS: {Mercado Libre y AB InBev|operaciones como Mercado Libre y AB InBev}
+CUSTOMER_LOGOS: {Mercado Libre y AB InBev|Mercado Libre y FEMSA}
 ```
 
 **Rendered (CTA-A):**
 ```
 Hola {{firstName}},
 
-Armamos un benchmark de cómo {{titlePlural}} en tech en México están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real. Datos reales, anónimos.
+Armamos un benchmark de cómo {{titlePlural}} en operaciones tech en México están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real. Datos reales, anónimos.
 
 Puedo mostrarte qué hacen Mercado Libre y AB InBev y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
 
@@ -716,7 +797,7 @@ Puedo mostrarte qué hacen Mercado Libre y AB InBev y cómo se puede aplicar al 
 ```
 Hola {{firstName}},
 
-Armamos un benchmark de cómo {{titlePlural}} en tech en México están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real. Datos reales, anónimos.
+Armamos un benchmark de cómo {{titlePlural}} en operaciones tech en México están automatizando auditoría con agentes IA, recuperando CFDIs y reconciliando con ERP en tiempo real. Datos reales, anónimos.
 
 Puedo mostrarte qué hacen Mercado Libre y AB InBev y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
 
@@ -732,16 +813,16 @@ titlePlural: CFOs
 
 PEER_ACTIVITIES: {están aplicando políticas por punto de venta, recuperando CFDIs automáticamente y cerrando el mes el mismo día|están controlando spend por tienda en cada cargo, recuperando CFDIs en vivo y cerrando el mes al instante}
 
-CUSTOMER_LOGOS: {Walmart y OXXO|cadenas como Walmart y OXXO}
+CUSTOMER_LOGOS: {Walmart, OXXO y FEMSA|cadenas como Walmart, OXXO y McDonald's}
 ```
 
 **Rendered (CTA-A):**
 ```
-Hey {{firstName}},
+Hola {{firstName}},
 
 Armamos un benchmark de cómo {{titlePlural}} de retail en México están aplicando políticas por punto de venta, recuperando CFDIs automáticamente y cerrando el mes el mismo día. Datos reales, anónimos.
 
-Puedo mostrarte qué hacen Walmart y OXXO y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+Puedo mostrarte qué hacen Walmart, OXXO y FEMSA y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
 
 ¿Te sería útil?
 ```
@@ -760,7 +841,7 @@ CUSTOMER_LOGOS: {Viva Aerobus|operaciones como Viva Aerobus}
 
 **Rendered (CTA-A):**
 ```
-Buenas {{firstName}},
+Hola {{firstName}},
 
 Armamos un benchmark de cómo {{titlePlural}} en logística en México están aplicando reglas por conductor y proveedor, con CFDIs y per-diems auditados antes del cierre. Datos reales, anónimos.
 
@@ -776,18 +857,18 @@ vertical: manufactura
 country: México
 titlePlural: CFOs
 
-PEER_ACTIVITIES: {están consolidando spend multi-planta con recuperación de CFDIs y reconciliación nativa a SAP S/4HANA|están unificando spend entre plantas con políticas en tiempo real, CFDIs recuperados y reconciliación nativa con SAP S/4HANA}
+PEER_ACTIVITIES: {están consolidando spend multi-planta con recuperación de CFDIs y reconciliación nativa a SAP, Contpaqi u Oracle|están unificando spend entre plantas con políticas en tiempo real, CFDIs recuperados y reconciliación nativa con el ERP}
 
-CUSTOMER_LOGOS: {AB InBev|operaciones como AB InBev}
+CUSTOMER_LOGOS: {AB InBev y Grupo Bafar|operaciones multi-planta como AB InBev}
 ```
 
 **Rendered (CTA-A):**
 ```
 Hola {{firstName}},
 
-Armamos un benchmark de cómo {{titlePlural}} de manufactura en México están consolidando spend multi-planta con recuperación de CFDIs y reconciliación nativa a SAP S/4HANA. Datos reales, anónimos.
+Armamos un benchmark de cómo {{titlePlural}} de manufactura en México están consolidando spend multi-planta con recuperación de CFDIs y reconciliación nativa a SAP, Contpaqi u Oracle. Datos reales, anónimos.
 
-Puedo mostrarte qué hace AB InBev y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+Puedo mostrarte qué hacen AB InBev y Grupo Bafar y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
 
 ¿Te interesaría?
 ```
@@ -799,18 +880,18 @@ vertical: farma
 country: México
 titlePlural: CFOs
 
-PEER_ACTIVITIES: {están aplicando política por representante, auditando en tiempo real y dejando el reporte de transparencia listo para exportar|están corriendo política por representante en cada cargo, con auditoría continua y reporte de transparencia listo para exportar}
+PEER_ACTIVITIES: {están aplicando política por representante, auditando en tiempo real y dejando el reporte de transparencia listo para exportar|están corriendo política por representante en cada cargo, con auditoría continua y reporte de transparencia audit-ready}
 
-CUSTOMER_LOGOS: {operaciones farma con fuerza distribuida|equipos farma con fuerza de ventas activa}
+CUSTOMER_LOGOS: {Farmacia San Pablo y Merck|Farmacia San Pablo}
 ```
 
 **Rendered (CTA-A):**
 ```
-Hey {{firstName}},
+Hola {{firstName}},
 
 Armamos un benchmark de cómo {{titlePlural}} de farma en México están aplicando política por representante, auditando en tiempo real y dejando el reporte de transparencia listo para exportar. Datos reales, anónimos.
 
-Puedo mostrarte qué hacen operaciones farma con fuerza distribuida y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+Puedo mostrarte qué hacen Farmacia San Pablo y Merck y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
 
 ¿Te sería útil?
 ```
@@ -824,7 +905,7 @@ titlePlural: CFOs
 
 PEER_ACTIVITIES: {están capturando gasto billable por engagement, multi-país, con CFDI integrado al ERP|están corriendo gasto billable por engagement en el momento del cargo, multi-país, con CFDI y ERP integrados}
 
-CUSTOMER_LOGOS: {KPMG|firmas como KPMG}
+CUSTOMER_LOGOS: {KPMG|firmas multi-país como KPMG}
 ```
 
 **Rendered (CTA-A):**
@@ -838,12 +919,36 @@ Puedo mostrarte qué hace KPMG y cómo se puede aplicar al setup de {{companyNam
 ¿Te haría sentido?
 ```
 
+#### Travel & Mobility
+
+```
+vertical: viajes corporativos
+country: México
+titlePlural: Travel Managers
+
+PEER_ACTIVITIES: {están consolidando booking, política y gasto de viajes en una sola plataforma, con adopción online u offline trackeada en tiempo real|están unificando booking y expense con política aplicada al momento de la reserva y gasto derivado integrado al ERP}
+
+CUSTOMER_LOGOS: {KPMG|firmas multi-país como KPMG}
+```
+
+**Rendered (CTA-A):**
+```
+Hola {{firstName}},
+
+Armamos un benchmark de cómo {{titlePlural}} de viajes corporativos en México están consolidando booking, política y gasto de viajes en una sola plataforma, con adopción online u offline trackeada en tiempo real. Datos reales, anónimos.
+
+Puedo mostrarte qué hace KPMG y cómo se puede aplicar al setup de {{companyName}}, sin pitch.
+
+¿Te interesaría?
+```
+
 ## Reply handling for Email 2
 
 | Reply | Sender response |
 |---|---|
 | "Sí, me interesa" / "Sí, mándalo" | `Perfecto, lo más útil es repasarlo en 20 min. ¿Te queda jueves o viernes esta semana?` Book the meeting in the reply, never in the cold body. |
 | "Mándame el PDF mejor" | `No tenemos PDF aparte porque depende del contexto. Si te queda 20 min te lo paso aplicado a {{companyName}}.` Push back to meeting once. |
+| "Suena interesante pero ahora no" | Offer CTA-C pilot: `Si más adelante quieren probarlo en chico — 10 a 20 tarjetas en un equipo, sin compromiso de expansión — te armo una propuesta. Sin presión.` |
 | "No me interesa" | Polite acknowledgment, move to long-term nurture. |
 | No reply | Email 3 with a different angle (case study or direct demo offer). |
 
@@ -853,16 +958,17 @@ Puedo mostrarte qué hace KPMG y cómo se puede aplicar al setup de {{companyNam
 
 ## Subject line library — Email 1
 
-Two patterns per industry. **Pattern A** (direct question) wins on replies; **Pattern C** (peer reference) wins on opens. A/B both per campaign.
+Three patterns per industry. **Pattern A** (direct question) wins on replies; **Pattern C** (peer reference) wins on opens; **Pattern D** (specific outcome) is the highest-impact for the Mercado Libre proof point. A/B test 2 per campaign.
 
-| Industry | Pattern A (direct question) | Pattern C (peer reference) |
-|---|---|---|
-| Tech | `{{firstName}}, ¿cómo manejan finanzas en {{companyName}}?` | `{{firstName}}, lo que hace Mercado Libre` |
-| Retail | `{{firstName}}, ¿cómo cierran el mes en {{companyName}}?` | `{{firstName}}, lo que hace Walmart` |
-| Logistics | `{{firstName}}, ¿cómo controlan flotilla en {{companyName}}?` | `{{firstName}}, lo que hace Viva Aerobus` |
-| Manufacturing | `{{firstName}}, ¿cómo reconcilian SAP en {{companyName}}?` | `{{firstName}}, lo que hace AB InBev` |
-| Pharma | `{{firstName}}, ¿cómo arman transparencia en {{companyName}}?` | `{{firstName}}, lo que cambió en farma` |
-| Professional Services | `{{firstName}}, ¿cómo capturan billable en {{companyName}}?` | `{{firstName}}, lo que hace KPMG` |
+| Industry | Pattern A (direct question) | Pattern C (peer reference) | Pattern D (specific outcome) |
+|---|---|---|---|
+| Tech-enabled operations | `{{firstName}}, ¿cómo manejan finanzas en {{companyName}}?` | `{{firstName}}, lo que hace Mercado Libre` | `{{firstName}}, cómo Mercado Libre subió 30% deducibilidad` |
+| Retail | `{{firstName}}, ¿cómo cierran el mes en {{companyName}}?` | `{{firstName}}, lo que hacen Walmart y OXXO` | `{{firstName}}, cierre el mismo día como Walmart` |
+| Logistics | `{{firstName}}, ¿cómo controlan flotilla en {{companyName}}?` | `{{firstName}}, lo que hace Viva Aerobus` | `{{firstName}}, control de flotilla como Viva Aerobus` |
+| Manufacturing | `{{firstName}}, ¿cómo reconcilian SAP en {{companyName}}?` | `{{firstName}}, lo que hace AB InBev` | `{{firstName}}, multi-planta como AB InBev` |
+| Pharma | `{{firstName}}, ¿cómo arman transparencia en {{companyName}}?` | `{{firstName}}, lo que hace Farmacia San Pablo` | `{{firstName}}, reporte audit-ready como Merck` |
+| Professional Services | `{{firstName}}, ¿cómo capturan billable en {{companyName}}?` | `{{firstName}}, lo que hace KPMG` | `{{firstName}}, gasto billable como KPMG` |
+| Travel & Mobility | `{{firstName}}, ¿cómo manejan viajes en {{companyName}}?` | `{{firstName}}, lo que hace KPMG en viajes` | `{{firstName}}, booking dentro de política como KPMG` |
 
 ## Subject line for Email 2
 
@@ -883,22 +989,26 @@ Used in Email 1 (any variant) and as alternatives for Email 2 CTA-A.
 | `¿Tiene sentido verlo aplicado a {{companyName}}?` | Neutral | Variant A1/A2 alternate |
 | `¿Hace sentido echarle un ojo para {{companyName}}?` | Casual Mexican | Variant A1/A2 alternate |
 
-## Objection defusion library (Variant A2 only)
+## Objection defusion library
 
 | # | Trigger | Template |
 |---|---|---|
-| 1 | Existing stack (Concur, AMEX, bank cards, fleet cards) | `Si ya operan con [stack], Mendel no [los/las] reemplaza: integra [things] en un solo lugar, con capacidades LatAm que [esos tools / los globales] no traen.` |
-| 2 | Implementation complexity (SAP, ERP, multi-country, compliance) | `Sé que [implementing X] suena pesado. Por diseño Mendel se conecta nativo a [SAP / ERP], no se le agrega encima.` |
+| 1 | Existing stack (Concur, AMEX, bank cards, fleet cards, TMC) | `Si ya operan con [stack], Mendel no [los/las] reemplaza: integra [things] en un solo lugar, con capacidades LatAm que [esos tools / los globales] no traen.` |
+| 2 | Implementation complexity (SAP, ERP, multi-country, compliance) | `Sé que [implementing X] suena pesado. Por diseño Mendel se conecta nativo a [SAP / ERP], no se le agrega encima, y la implementación va con acompañamiento end-to-end del equipo Mendel.` |
 | 3 | Current process works well enough | `Sé que el proceso actual funciona. La pregunta es cuántas horas y cuánta deductibilidad se pierden cada mes que ya no vuelven.` |
+| 4 | Free bank cards / cheap credit | `Sé que el banco te da tarjetas sin cargo extra. La diferencia no son las tarjetas, es la capa de software encima: política preventiva, recuperación de CFDIs y reconciliación con el ERP.` |
+| 5 | Global mandate / "the global CFO uses X" | `Sé que la directiva global usa [Concur / sistema global]. Mendel empuja los datos al sistema global y suma la tropicalización México que el global no cubre — CFDI, SAT, políticas en tiempo real.` |
+| 6 | Driver / operator adoption fear | `El miedo común es que los choferes u operadores no usen otra app. La acción del usuario se reduce a sacar foto al ticket; Mendel hace el resto en automático.` |
 
 | Industry | Default objection used in Variant A2 |
 |---|---|
-| Tech | #1 |
-| Retail | #1 |
-| Logistics | #1 |
-| Manufacturing | #2 |
-| Pharma | #2 |
-| Professional Services | #3 |
+| Tech-enabled operations | #1 or #5 (global mandate) |
+| Retail | #1 or #4 (free bank cards) |
+| Logistics | #6 (driver adoption) |
+| Manufacturing | #2 (SAP implementation) |
+| Pharma | #2 (compliance complexity) |
+| Professional Services | #3 (current process works) |
+| Travel & Mobility | #1 (existing TMC) |
 
 ---
 
@@ -906,13 +1016,12 @@ Used in Email 1 (any variant) and as alternatives for Email 2 CTA-A.
 
 Spintax format: `{option1|option2|option3}`. Two layers:
 
-1. **Static spintax in master templates** — connector words, greetings, verbs of speech.
+1. **Static spintax in master templates** — connector words, verbs of speech.
 2. **Industry-variable spintax in fill tables** — each per-industry variable has 2 phrasings of the same idea.
 
 Both get resolved by EmailBison at send time. Each layer is independent.
 
 **Allowed in spintax (Layer 1, master templates):**
-- Greetings: `{Hola|Hey|Buenas}`
 - Conversation verbs: `{Platicando|Hablando|Conversando}`, `{Cuando hablo|Cuando converso|En las conversaciones}`
 - Quantifiers: `{todos|casi todos|la mayoría|muchos|varios}`
 - Verbs of speech: `{cuentan|describen|comparten}`
@@ -929,7 +1038,8 @@ Both get resolved by EmailBison at send time. Each layer is independent.
 
 **Never spintax:**
 - Merge variables (`{{firstName}}`, `{{companyName}}`, `{{titlePlural}}`, `{{vertical}}`, `{{country}}`)
-- Customer / brand names inside the spintax options (Mercado Libre, KPMG, AB InBev, Walmart, OXXO, Viva Aerobus, Mendel, Concur, AMEX, SAP, S/4HANA, ERP, CFDI, SAT, HCP)
+- Customer / brand names inside the spintax options (Mercado Libre, FEMSA, KPMG, AB InBev, Walmart, OXXO, McDonald's, Tim Hortons, PetCo, Grupo Bafar, Farmacia San Pablo, Merck, Viva Aerobus, Mendel, Concur, AMEX, SAP, S/4HANA, Contpaqi, Oracle, ERP, CFDI, SAT, HCP)
+- The opening `Hola {{firstName}},`
 
 ---
 
@@ -945,3 +1055,4 @@ All variants and rendered examples comply with:
 - No accusatory framing about the prospect's company
 - One question per email (the CTA)
 - Spanish for Mexico / Argentina / Chile audiences
+- Greeting: `Hola` only (no Hey, no Buenas — preserves expert/professional tone)
