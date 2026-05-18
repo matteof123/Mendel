@@ -21,7 +21,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
 HERE = Path(__file__).parent
-SRC = HERE / "campaigns" / "email-library.md"
+SRC = HERE / "campaigns" / "Mendel_Rendered_Emails.md"
 OUT = HERE / "campaigns" / "Mendel_Email_Library.pdf"
 
 # Colors — match Mendel's brand neutrals
@@ -199,9 +199,9 @@ def build_story(md_text):
     i = 0
 
     # Title block (manual, override any first H1)
-    story.append(Paragraph("Mendel — Email Sequence Library", styles["title"]))
+    story.append(Paragraph("Mendel — Rendered Email Copy", styles["title"]))
     story.append(Paragraph(
-        "Cold outbound copy library. Spanish (Mexico priority).",
+        "All 35 rendered emails. Spanish (Mexico priority). Industry · target persona · subject · body.",
         styles["subtitle"]
     ))
 
@@ -240,7 +240,7 @@ def build_story(md_text):
         # Headings — skip the first H1 (title done above)
         if line.startswith("# "):
             text = line[2:].strip()
-            if text == "Mendel — Email Sequence Library":
+            if text in ("Mendel — Email Sequence Library", "Mendel — Rendered Email Copy"):
                 i += 1
                 continue
             story.append(Paragraph(inline_md_to_html(text), styles["h1"]))
@@ -353,9 +353,9 @@ def header_footer(canvas, doc):
     canvas.rect(0, LETTER[1] - 0.5 * inch, LETTER[0], 0.5 * inch, fill=1, stroke=0)
     canvas.setFillColor(colors.white)
     canvas.setFont("Helvetica-Bold", 10)
-    canvas.drawString(0.7 * inch, LETTER[1] - 0.3 * inch, "Mendel — Email Sequence Library")
+    canvas.drawString(0.7 * inch, LETTER[1] - 0.3 * inch, "Mendel — Rendered Email Copy")
     canvas.setFont("Helvetica", 8)
-    canvas.drawRightString(LETTER[0] - 0.7 * inch, LETTER[1] - 0.3 * inch, "Cold outbound copy")
+    canvas.drawRightString(LETTER[0] - 0.7 * inch, LETTER[1] - 0.3 * inch, "Cold outbound")
 
     # Footer
     canvas.setFillColor(BRAND_MUTED)
