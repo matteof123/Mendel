@@ -123,15 +123,16 @@ def build_styles():
         "Code",
         parent=base["Code"],
         fontName="Courier",
-        fontSize=8.5,
-        leading=11,
+        fontSize=9,
+        leading=13,
         textColor=BRAND_PRIMARY,
         backColor=CODE_BG,
         leftIndent=8,
         rightIndent=8,
-        borderPadding=8,
-        spaceAfter=8,
+        borderPadding=10,
+        spaceAfter=10,
         spaceBefore=4,
+        wordWrap="LTR",
     )
     s["table_cell"] = ParagraphStyle(
         "TableCell",
@@ -214,11 +215,20 @@ def build_story(md_text):
         # Code block fence
         if line.strip().startswith("```"):
             if in_code_block:
-                # Close it — render the buffer
+                # Close it — render the buffer as a wrapping Paragraph (so long
+                # sentences wrap inside the code-style frame instead of being
+                # cut at the right margin like Preformatted would do).
                 code_text = "\n".join(code_buffer)
                 if code_text.strip():
-                    pre = Preformatted(code_text, styles["code"])
-                    story.append(pre)
+                    escaped = (
+                        code_text
+                        .replace("&", "&amp;")
+                        .replace("<", "&lt;")
+                        .replace(">", "&gt;")
+                        .replace("\n\n", "<br/><br/>")
+                        .replace("\n", "<br/>")
+                    )
+                    story.append(Paragraph(escaped, styles["code"]))
                 code_buffer = []
                 in_code_block = False
             else:
